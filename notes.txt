@@ -1,0 +1,14 @@
+
+
+Make a Member class -- we wont need to store these objects since they go directly into the DB, but i think it will clean things up
+
+do you know how we will make the IDs? does oracle or sql have something that we do it for us or will we need to write functions to create unique IDs
+
+
+Also, there are tables that i think we need to populate on our own
+
+- employee tables
+- ski resort properties
+- lifts
+- lesson types
+- probably more stuff too, we can figure exactly what needs to be inputed vs manually populated especially for dependencies

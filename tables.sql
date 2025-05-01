@@ -183,7 +183,7 @@ CREATE TABLE SkiPass (
     PRIMARY KEY (skiPassId)
 );
 
-CREATE TABLE SkiPass (
+CREATE TABLE SkiPassArchive (
     skiPassArchiveId INT,
     memberId INT,
     numberOfUses INT NOT NULL,

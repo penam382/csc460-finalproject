@@ -1,3 +1,5 @@
+import java.sql.*;
+
 public class SkiPass {
 
 	public SkiPass() {
@@ -247,7 +249,7 @@ public class SkiPass {
 			stmt.setInt(2, resortPropertyId);
 			stmt.setInt(3, memberId);
 			stmt.setString(4, transactionType);
-			stmt.setTimestamp(5, transactionDateTime);
+			stmt.setTimestamp(5, xactDateTime);
 			stmt.setDouble(6, amount);
 
 			stmt.executeUpdate();
@@ -346,7 +348,7 @@ public class SkiPass {
 		}
 	}
 
-	public boolean newSkiPass(Connection dbconn, int memberId, int resortPropertyId, String xactType, Timestamp xactDateTime,
+	public boolean newSkiPass(Connection dbconn, int memberId, int resortPropertyId, Timestamp xactDateTime,
 	double amount, int remainingUses, Date expirationDate) {
 		// createNewXactId
 		int newTransactionId = createNewXactId(dbconn);
@@ -361,7 +363,7 @@ public class SkiPass {
 		}
 
 		// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
-		createNewTransaction(dbconn, newransactionId, resortPropertyId, memberId, xactType, xactDateTime, amount);
+		createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Ski Pass", xactDateTime, amount);
 
 		// createNewSkiPassId
 		int newSkiPassId = createSkiPassId(dbconn);
@@ -370,7 +372,7 @@ public class SkiPass {
 		createNewSkiPass(dbconn, newSkiPassId, remainingUses, expirationDate);
 
 		// createNewSkiPassXactDetailsId
-		newSkiPassXactDetailsId = createNewSkiPassXactDetailsId(dbconn);
+		int newSkiPassXactDetailsId = createNewSkiPassXactDetailsId(dbconn);
 
 		// create new skiPassXactDetails, content: id, transactionId, skiPassId
 		createNewSkiPassXactDetails(dbconn, newSkiPassXactDetailsId, newTransactionId, newSkiPassId);
@@ -535,7 +537,7 @@ public class SkiPass {
 									 "JOIN SkiPass sp ON spx.skiPassId = sp.skiPassId "+
 									 "WHERE sp.skiPassId = ?";
 
-			stmt = dbconn.prepareStatement(getSkiPassQuery);
+			stmt = dbconn.prepareStatement(archiveInfoQuery);
 			stmt.setInt(1, skiPassId);
 			answer = stmt.executeQuery();
 
@@ -639,8 +641,8 @@ public class SkiPass {
 			stmt.setInt(1, skiPassId);
 			answer = stmt.executeQuery();
 
-			System.out.println("Lift Rides:")
-			System.out.println("[Lift Name | Usage Date Time]")
+			System.out.println("Lift Rides:");
+			System.out.println("[Lift Name | Usage Date Time]");
 
 			while(answer.next()) {
 				String liftName = answer.getString("liftName");
@@ -663,8 +665,8 @@ public class SkiPass {
 			stmt.setInt(1, skiPassId);
 			answer = stmt.executeQuery();
 
-			System.out.println("Equipment Rentals:")
-			System.out.println("[Rental Xact ID | Xact Date Time | Item Type | Item Size | Return Status ]")
+			System.out.println("Equipment Rentals:");
+			System.out.println("[Rental Xact ID | Xact Date Time | Item Type | Item Size | Return Status ]");
 
 			while(answer.next()) {
 				int rentalXactId = answer.getInt("rentalXactDetailsId");

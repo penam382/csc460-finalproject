@@ -3,6 +3,11 @@
 Make a Member class -- we wont need to store these objects since they go directly into the DB, but i think it will clean things up
 
 do you know how we will make the IDs? does oracle or sql have something that we do it for us or will we need to write functions to create unique IDs
+ -- I am not sure, but I think Oracle will auto generate the IDs for us... I'll figure it out once we get there
+ -- We are gonna need to make the IDs ourselves... my thought is just using a count... maybe a string plus a running count somehow
+
+Q: Do we need constructors? I feel like we should just use the objects to perform actions in the database...
+   bc we aren't gonna actually store an object for every member in the DB, for example.
 
 
 Also, there are tables that i think we need to populate on our own
@@ -12,3 +17,24 @@ Also, there are tables that i think we need to populate on our own
 - lifts
 - lesson types
 - probably more stuff too, we can figure exactly what needs to be inputed vs manually populated especially for dependencies
+
+
+
+
+TODO:
+- Write Classes for all components with relevant Add/Update/Delete Components OR are part of queries
+- Write UI code in Prog4
+- Go in and physically create tables in Oracle on chosen account
+- Populate Entries into tables
+- Test & Fix Existing code
+	- Try all functionalities
+	- Try all queries
+- Complete design.pdf
+	- E-R Diagram (final)
+	- Logical DB design
+	- Normalization Analysis
+	- Query Descriptions
+- Complete readme.txt
+	- Compilation & Execution instructions
+	- Workload Distribution
+- Present to TAs

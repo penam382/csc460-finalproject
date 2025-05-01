@@ -1,6 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 /**
@@ -45,6 +43,7 @@ public class Prog4 {
         String username = "username"; 
         String password = "password";
 
+        // Load the Oracle JDBC driver by initializing its base class
         try {
 
             Class.forName("oracle.jdbc.OracleDriver");
@@ -59,6 +58,7 @@ public class Prog4 {
         }
 
         try {
+            // Make connection to Oracle database, store in dbconn variable
             dbconn = DriverManager.getConnection(oracleURL, username, password);
             System.out.println("Connected to Oracle database.");
 

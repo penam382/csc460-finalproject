@@ -111,6 +111,7 @@ CREATE TABLE RentalXactDetails (
     transactionId INT NOT NULL,
     skiPassId INT NOT NULL,
     returnStatus VARCHAR2(20) NOT NULL,
+    dateReturned DATE,
     PRIMARY KEY (rentalXactDetailsId),
     FOREIGN KEY (transactionId) REFERENCES Transactions(transactionId),
     FOREIGN KEY (skiPassId) REFERENCES SkiPass(skiPassId)
@@ -182,6 +183,14 @@ CREATE TABLE SkiPass (
     PRIMARY KEY (skiPassId)
 );
 
+CREATE TABLE SkiPass (
+    skiPassArchiveId INT,
+    memberId INT,
+    numberOfUses INT NOT NULL,
+    PRIMARY KEY (skiPassId),
+    FOREIGN KEY (nemberId) REFERENCES MemberAccount(memberId)
+);
+
 CREATE TABLE LiftUsage (
     liftUsageId INT,
     liftId INT NOT NULL,
@@ -234,6 +243,7 @@ CREATE TABLE RentalInventory (
     resortPropertyId INT NOT NULL,
     itemType VARCHAR2(50) NOT NULL, -- ski, snowboard, poles, boots, etc.
     itemSize VARCHAR2(30) NOT NULL, -- varies by item type
+    archived NUMBER(1) NOT NULL, -- 0 not archived, 1 archived
     PRIMARY KEY (itemId),
     FOREIGN KEY (resortPropertyId) REFERENCES ResortProperty(resortPropertyId)
 );
@@ -245,6 +255,16 @@ CREATE TABLE ItemInRental (
     PRIMARY KEY (itemInRentalId),
     FOREIGN KEY (itemId) REFERENCES RentalInventory(itemId),
     FOREIGN KEY (rentalXactDetailsId) REFERENCES RentalXactDetails(rentalXactDetailsId)
+);
+
+CREATE TABLE RentalChangeLog (
+    rentalChangeLogId INT,
+    itemId INT NOT NULL,
+    itemType VARCHAR2(50) NOT NULL, -- ski, snowboard, poles, boots, etc.
+    itemSize VARCHAR2(30) NOT NULL, -- varies by item type
+    changeDate DATE NOT NULL
+    PRIMARY KEY (rentalChangeLogId),
+    FOREIGN KEY (itemId) REFERENCES RentalInventory(itemId)
 );
 
 -- =================================

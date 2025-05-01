@@ -24,21 +24,52 @@ public class Member {
         this.emergencyContactPhone = emergencyContactPhone;
     }
 
+    public int createNewMemberId(Connection dbconn){
+        return 1;
+    }
+
+    public int createNewEmergContId(Connection dbconn) {
+        return 1;
+    }
+
     // Method to insert member into database
     public boolean insertMember(Connection dbconn) throws SQLException {
+        // Create Unique Member ID
+
+        // Create Emergency Contact:
+            // Create Unique Emergency Contact ID
+            // Content: Name, Phone Number
+
+        // Create Member Content: name, phoneNumber, email, dateOfBirth, emergencyContactId
+
         
-        // here we will add the information into our DB
 
         return true;
     }
 
-    public boolean deletetMember(Connection dbconn) throws SQLException {
+    public boolean deleteMember(Connection dbconn) throws SQLException {
+
+        // Check member has no active ski passes
+
+        // Check member has no open rentals
+
+        // Check member has no unused lesson sessions
+
+        // If all checks pass, remove all related entries, and record
 
         return true;
     }
 
-    public boolean updateMember(Connection dbconn) throws SQLException {
-        return true; 
+    public boolean updatePhoneNumber(Connection dbconn, int memberId, String newPhoneNumber) {
+        return true;
+    }
+
+    public boolean updateEmail(Connection dbconn, int memberId, String newEmail) {
+        return true;
+    }
+
+    public boolean updateEmergencyContact(Connection dbconn, int memberId, String newContactName, String newContactPhoneNum) {
+        return true;
     }
 
     /**
@@ -60,6 +91,10 @@ public class Member {
         return "";
 
     } 
+
+    public void listMembers(Connection dbconn) {
+
+    }
 
 
     // Getters and Setters

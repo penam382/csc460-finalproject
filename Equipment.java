@@ -1,3 +1,5 @@
+import java.sql.*;
+
 public class Equipment {
 	public Equipment() {
 

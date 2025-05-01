@@ -110,7 +110,7 @@ CREATE TABLE RentalXactDetails (
     rentalXactDetailsId INT,
     transactionId INT NOT NULL,
     skiPassId INT NOT NULL,
-    returnStatus VARCHAR2(20) NOT NULL,
+    returnStatus NUMBER(1) NOT NULL, -- 0 if not returned, 1 if returned
     dateReturned DATE,
     PRIMARY KEY (rentalXactDetailsId),
     FOREIGN KEY (transactionId) REFERENCES Transactions(transactionId),

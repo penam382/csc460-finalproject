@@ -3,7 +3,7 @@ public class Lesson {
 
 	}
 
-	private int createTransactionId(Connection dbconn) {
+	private int createNewTransactionId(Connection dbconn) {
 		return 1;
 	}
 
@@ -30,11 +30,11 @@ public class Lesson {
 
 		// verify resortPropertyId, memberId
 
-		// populate transaction content: transactionType, transactionDateTime, amount
+		// populate transaction content: resortPropertyId, memberId, transactionType, transactionDateTime, amount
 
 		// Create LessonXactDetailsId
 
-		// Populate LessonXactDetails content: transactionId, numSessions, remainingSessions
+		// Populate LessonXactDetails content: transactionId, numSessions = 0, remainingSessions
 
 		return true;
 	}
@@ -46,7 +46,7 @@ public class Lesson {
 
 		// Populate LessonUsage: lessonXactDetailsId, lessonSessionId, usedDate, attended
 
-		// decrement remaining sessions
+		// decrement remaining sessions, increment numSessions
 	}
 
 	public boolean deleteLessonXact(Connection, int lessonXactDetailsId) {

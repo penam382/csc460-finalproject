@@ -3,7 +3,7 @@ public class Rental {
 
 	}
 
-	private int createTransactionId(Connection dbconn) {
+	private int createNewTransactionId(Connection dbconn) {
 		return 1;
 	}
 
@@ -16,31 +16,39 @@ public class Rental {
 	}
 
 	private boolean createItemInRental(Connection dbconn, int itemId, int RentalXactDetailsId){
+		// Validate itemId, rentalXactDetailsId
+
+		// create itemInRentalId
+
+		// Populate Content: itemId, RentalXactDetialsId
+
 		return true;
 	}
 
 	public boolean createRentalXact(Connection dbconn, int resortPropertyId, int memberId, String transactionType,
-	String dateTime, int amount, int skiPassId, int itemId) {
+	String dateTime, int amount, int skiPassId, ArrayList<Integer> itemIds) {
 		// Create Transaction Id
 
 		// verify resortPropertyId, memberId
 
-		// populate transaction content: transactionType, transactionDateTime, amount
+		// populate transaction content: resortPropId, memberId, transactionType, transactionDateTime, amount
 
 		// Create RentalXactDetailsId
 
 		// Validate skiPassId
 
-		// fill content for RentalXactDetails: TransactionId, skiPassId, returnStatus, dateReturned
+		// fill content for RentalXactDetails: TransactionId, skiPassId, returnStatus = 0, dateReturned = NULL
 
-		// CreateItemInRental
-			// check itemId
-			// call createItemInRental
+		// For itemId in itemIds
+			// createItemInRental()
 
 		return true;
 	}
 
-	public boolean setRentalXactReturned(Connection dbconn, int rentalXactDetailsId) {
+	public boolean setRentalXactReturned(Connection dbconn, int rentalXactDetailsId, String dateReturned) {
+
+		// Update RentalXactDetails content: ReturnStatus = 1, DateReturned = dateReturned
+
 		return true;
 	}
 

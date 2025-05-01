@@ -1,19 +1,34 @@
 public class SkiPass {
 
 	public SkiPass() {
-		
+
+	}
+
+	public int createNewXactId(Connection dbconn) {
+		return 1;
+	}
+
+	public int createNewSkiPassXactDetailsId(Connection dbconn) {
+
 	}
 
 	public int createSkiPassId(Connection dbconn) {
-
+		return 1;
 	}
 
-	public boolean createSkiPass(int memberId){
-		// Create Unique ID
+	public boolean newSkiPass(Connection dbconn, int memberId, int resortPropertyId, String xactType, String xactDateTime,
+	int amount, int remainingUses, String expirationDate) {
+		// createNewXactId
 
-		// Somehow associate with memberId
+		// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
 
-		// Prepare content: numberOfUses, remainingUses, expirationDate
+		// createNewSkiPassId
+
+		// create new SkiPass, content: skiPassId, numUses = 0, remainingUses, expirDate
+
+		// createNewSkiPassXactDetailsId
+
+		// create new skiPassXactDetails, content: id, transactionId, skiPassId
 
 		return true;
 	}
@@ -34,7 +49,14 @@ public class SkiPass {
 		// Move to SkiPassArchive
 
 		// Remove all related records
+		return true;
 	}
 
+	public String skiPassQuery(Connection dbconn, int skiPassId){
+		// For a given ski pass, list all lift rides and equpment rentals associated with it, along with
+		//	timestamps and return status
+
+		
+	}
 
 }

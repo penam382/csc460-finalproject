@@ -13,7 +13,7 @@ public class Member {
     private String emergencyContactName;
     private String emergencyContactPhone;
 
-    // Constructor
+    // Constructor (I don't think we need this but could be wrong...)
     public Member(String name, String phoneNumber, String email, LocalDate dateOfBirth, 
                   String emergencyContactName, String emergencyContactPhone) {
         this.name = name;
@@ -86,12 +86,15 @@ public class Member {
       *     
       */
     public String memberQuery(Connection dbconn, int memberId) {
+        // For a given member, list all the ski sessions they have purchased, including the number
+        //  of remaining sessions, instructor name, and scheduled time
         
         // check if memberId in DB
         return "";
 
     } 
 
+    // Method to potentially help the UI
     public void listMembers(Connection dbconn) {
 
     }

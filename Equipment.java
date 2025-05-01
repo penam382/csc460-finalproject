@@ -12,9 +12,7 @@ public class Equipment {
 
 		// verify resort property id, quit if invalid
 
-		// Add content: itemType, itemSize
-
-		// Not Archived
+		// Add content: itemType, itemSize, archived = 0
 
 		return true;
 	}

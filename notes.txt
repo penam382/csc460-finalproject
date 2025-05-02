@@ -49,3 +49,12 @@ Notes as I code:
 - im like 85% done with the Member class, i will pick back up there since it got late - thanks!
 
 Seth Notes 5/2
+- I created the superclass ResortComponent... it includes the following repeated functionalities
+	- Creating a new ID for a table (createNewId())
+	- Check if a certain item with id exists in a table (existsId())
+	- createNewTransaction()
+	- Delete From Where common SQL query (deleteFromWhere())
+We could potentially work to move more things up to the superclass,
+but these are the ones that I found are obviously repeating. Moving them
+to superclass decreased code a ton already... The other functionality that i
+left in specific classes tended to have components specific to that class.

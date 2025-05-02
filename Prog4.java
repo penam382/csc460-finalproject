@@ -39,9 +39,9 @@ public class Prog4 {
         final String oracleURL =   // Magic lectura -> aloe access spell
                         "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
-        // we can put either mine or your info here
-        String username = "username"; 
-        String password = "password";
+        // Seth Login Info
+        String username = "sajernigan";
+	    String password = "a9330";
 
         // Load the Oracle JDBC driver by initializing its base class
         try {

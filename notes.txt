@@ -38,3 +38,12 @@ TODO:
 	- Compilation & Execution instructions
 	- Workload Distribution
 - Present to TAs
+
+
+
+Notes as I code:
+- do we have to check if like phone number is a valid "XXX-XXX-XXXX" type? might be extra work tho if not needed.
+- same idea for email, is @xxx.com needed? im guessing maybe not (hopefully not but wanted to note it just incase)
+- does the way that java handles the date the same way that sql handles dates? same format and all? (i will look into this)
+
+- im like 85% done with the Member class, i will pick back up there since it got late

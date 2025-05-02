@@ -1,152 +1,16 @@
 import java.sql.*;
 
-public class Equipment {
+public class Equipment extends ResortComponent {
 	public Equipment() {
 
 	}
 
-	private int createEquipmentId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(itemId) AS maxId FROM RentalInventory";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	private int createNewRentalChangeLogId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(rentalChangeLogId) AS maxId FROM RentalChangeLog";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	public boolean existsResortPropertyId(Connection dbconn, int givenResortPropertyId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM ResortProperty WHERE resortPropertyId = " + givenResortPropertyId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No resort property with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
 	public boolean addNewEquipment(Connection dbconn, int resortPropertyId, String itemType, String itemSize) {
 		// Create unique equipment ID
-		int newEquipmentId = createEquipmentId(dbconn);
+		int newEquipmentId = createNewId(dbconn, "RentalInventory", "itemId");
 
 		// verify resort property id, quit if invalid
-		if(!existsResortPropertyId(dbconn, resortPropertyId)){
+		if(!existsId(dbconn, resortPropertyId, "ResortProperty", "resortPropertyId")){
 			return false;
 		}
 
@@ -172,7 +36,7 @@ public class Equipment {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -181,7 +45,7 @@ public class Equipment {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 			
 		}
@@ -219,7 +83,7 @@ public class Equipment {
 			answer.close();
 			
 			// save current version to RentalChangeLog
-			int newRentalChangeLogId = createNewRentalChangeLogId(dbconn);
+			int newRentalChangeLogId = createNewId(dbconn, "RentalChangeLog", "rentalChangeLogId");
 
 			String insertIntoChangeLogQuery = "INSERT INTO RentalChangeLog (rentalChangeLogId, itemId, itemType, itemSize, changeDate) VALUES (?, ?, ?, ?, ?)";
 
@@ -245,6 +109,7 @@ public class Equipment {
 				updated = true;
 			} else {
 				System.out.println("ERROR: Failed to update equipment type.");
+				return false;
 			} 
 		} catch (SQLException e) {
 	
@@ -253,7 +118,7 @@ public class Equipment {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -262,7 +127,7 @@ public class Equipment {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 		}
 
@@ -299,7 +164,7 @@ public class Equipment {
 			answer.close();
 			
 			// save current version to RentalChangeLog
-			int newRentalChangeLogId = createNewRentalChangeLogId(dbconn);
+			int newRentalChangeLogId = createNewId(dbconn, "RentalChangeLog", "rentalChangeLogId");
 
 			String insertIntoChangeLogQuery = "INSERT INTO RentalChangeLog (rentalChangeLogId, itemId, itemType, itemSize, changeDate) VALUES (?, ?, ?, ?, ?)";
 
@@ -325,6 +190,7 @@ public class Equipment {
 				updated = true;
 			} else {
 				System.out.println("ERROR: Failed to update equipment size.");
+				return false;
 			} 
 		} catch (SQLException e) {
 	
@@ -333,7 +199,7 @@ public class Equipment {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -342,7 +208,7 @@ public class Equipment {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 		}
 
@@ -393,7 +259,7 @@ public class Equipment {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -402,7 +268,7 @@ public class Equipment {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 			
 		}

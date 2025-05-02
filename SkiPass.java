@@ -1,281 +1,12 @@
 import java.sql.*;
 
-public class SkiPass {
+public class SkiPass extends ResortComponent{
 
 	public SkiPass() {
 
 	}
 
-	public int createNewXactId(Connection dbconn) {
-		
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(transactionId) AS maxId FROM Transactions";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	public int createNewSkiPassXactDetailsId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(skiPassXactDetailsId) AS maxId FROM SkiPassXactDetails";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	public int createSkiPassId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(skiPassId) AS maxId FROM SkiPass";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	public boolean existsMemberId(Connection dbconn, int givenMemberId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM MemberAccount WHERE memberId = " + givenMemberId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No member with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
-	public boolean existsResortPropertyId(Connection dbconn, int givenResortPropertyId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM ResortProperty WHERE resortPropertyId = " + givenResortPropertyId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No resort property with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
-	public void createNewTransaction(Connection dbconn, int transactionId, int resortPropertyId, int memberId, String transactionType,
-	Timestamp xactDateTime, double amount){
-		PreparedStatement stmt = null;
-
-		try{
-			String query = "INSERT INTO Transactions " +
-                "(transactionId, resortPropertyId, memberId, transactionType, transactionDateTime, amount) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-
-			stmt = dbconn.prepareStatement(query);
-			stmt.setInt(1, transactionId);
-			stmt.setInt(2, resortPropertyId);
-			stmt.setInt(3, memberId);
-			stmt.setString(4, transactionType);
-			stmt.setTimestamp(5, xactDateTime);
-			stmt.setDouble(6, amount);
-
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not execute insertion.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-	}
-
-	public void createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate) {
+	public boolean createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate) {
 		PreparedStatement stmt = null;
 
 		try{
@@ -297,7 +28,7 @@ public class SkiPass {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -306,13 +37,13 @@ public class SkiPass {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
-			
 		}
+		return true;
 	}
 
-	public void createNewSkiPassXactDetails(Connection dbconn, int skiPassXactDetailsId, int transactionId, int skiPassId) {
+	public boolean createNewSkiPassXactDetails(Connection dbconn, int skiPassXactDetailsId, int transactionId, int skiPassId) {
 		PreparedStatement stmt = null;
 
 		try{
@@ -333,7 +64,7 @@ public class SkiPass {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -342,40 +73,52 @@ public class SkiPass {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
-			
 		}
+		return true;
 	}
 
 	public boolean newSkiPass(Connection dbconn, int memberId, int resortPropertyId, Timestamp xactDateTime,
 	double amount, int remainingUses, Date expirationDate) {
 		// createNewXactId
-		int newTransactionId = createNewXactId(dbconn);
+		int newTransactionId = createNewId(dbconn, "Transactions", "transactionId");
 
 		// Validate memberId, resortPropertyId
-		if(!existsMemberId(dbconn, memberId)) {
+		if(!existsId(dbconn, memberId, "MemberAccount", "memberId")) {
 			return false;
 		}
 		
-		if(!existsResortPropertyId(dbconn, resortPropertyId)){
+		if(!existsId(dbconn, resortPropertyId, "ResortProperty", "resortPropertyId")){
 			return false;
 		}
 
 		// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
-		createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Ski Pass", xactDateTime, amount);
+		boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Ski Pass", xactDateTime, amount);
+		
+		if(!successXact) {
+			return false;
+		}
 
 		// createNewSkiPassId
-		int newSkiPassId = createSkiPassId(dbconn);
+		int newSkiPassId = createNewId(dbconn, "SkiPass", "skiPassId");
 
 		// create new SkiPass, content: skiPassId, numUses = 0, remainingUses, expirDate
-		createNewSkiPass(dbconn, newSkiPassId, remainingUses, expirationDate);
+		boolean successSkiPass = createNewSkiPass(dbconn, newSkiPassId, remainingUses, expirationDate);
 
-		// createNewSkiPassXactDetailsId
-		int newSkiPassXactDetailsId = createNewSkiPassXactDetailsId(dbconn);
+		if(!successSkiPass){
+			return false;
+		}
+
+		// create NewSkiPassXactDetailsId
+		int newSkiPassXactDetailsId = createNewId(dbconn, "SkiPassXactDetails", "skiPassXactDetailsId");
 
 		// create new skiPassXactDetails, content: id, transactionId, skiPassId
-		createNewSkiPassXactDetails(dbconn, newSkiPassXactDetailsId, newTransactionId, newSkiPassId);
+		boolean successSkiPasXact = createNewSkiPassXactDetails(dbconn, newSkiPassXactDetailsId, newTransactionId, newSkiPassId);
+
+		if(!successSkiPasXact) {
+			return false;
+		}
 
 		return true;
 	}
@@ -397,6 +140,7 @@ public class SkiPass {
 				updated = true;
 			} else {
 				System.out.println("ERROR: Failed to update ski pass usage.");
+				return false;
 			} 
 		} catch (SQLException e) {
 	
@@ -405,7 +149,7 @@ public class SkiPass {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -414,7 +158,7 @@ public class SkiPass {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 			
 		}
@@ -438,6 +182,7 @@ public class SkiPass {
 				updated = true;
 			} else {
 				System.out.println("ERROR: Failed to update ski pass usage.");
+				return false;
 			} 
 		} catch (SQLException e) {
 	
@@ -446,7 +191,7 @@ public class SkiPass {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -455,56 +200,12 @@ public class SkiPass {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 			
 		}
 
 		return updated;
-	}
-
-	public int createNewSkiPassArchiveId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(skiPassArchiveId) AS maxId FROM SkiPassArchive";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
 	}
 
 	public boolean deleteSkiPass(Connection dbconn, int skiPassId) {
@@ -553,7 +254,7 @@ public class SkiPass {
 			answer.close();
 
 			// Create new ski pass archive Id
-			int newSkiPassArchiveId = createNewSkiPassArchiveId(dbconn);
+			int newSkiPassArchiveId = createNewId(dbconn, "SkiPassArchive", "skiPassArchiveId");
 
 			// Place newSkiPassArchiveId, MemberId, NumberOfUses in SkiPassArchive
 			String insertIntoArchiveQuery = "INSERT INTO SkiPassArchive (skiPassArchiveId, memberId, numberOfUses) VALUES (?, ?, ?)";
@@ -566,33 +267,31 @@ public class SkiPass {
 			stmt.close();
 
 			// Delete all entries with skiPassId from SkiPassXactDetails, RentalXactDetails, LiftUsage, SkiPass
-			String deleteFromSpXactDetails = "DELETE FROM SkiPassXactDetails WHERE skiPassId = ?";
 
-			stmt = dbconn.prepareStatement(deleteFromSpXactDetails);
-			stmt.setInt(1, skiPassId);
-			stmt.executeUpdate();
-			stmt.close();
+			// Delete from SkiPassXactDetails
+			boolean successDelSkiPassXact = deleteFromWhere(dbconn, "SkiPassXactDetails", "skiPassId", skiPassId);
+			if(!successDelSkiPassXact) {
+				return false;
+			}
 
-			String deleteFromRentXactDetails = "DELETE FROM RentalXactDetails WHERE skiPassId = ?";
+			// Delete from RentXactDetails
+			boolean successDelRentXact = deleteFromWhere(dbconn, "RentalXactDetails", "skiPassId", skiPassId);
+			if(!successDelRentXact) {
+				return false;
+			}
 
-			stmt = dbconn.prepareStatement(deleteFromRentXactDetails);
-			stmt.setInt(1, skiPassId);
-			stmt.executeUpdate();
-			stmt.close();
+			// Delete from LiftUsage
+			boolean successDelLiftUsage = deleteFromWhere(dbconn, "LiftUsage", "skiPassId", skiPassId);
+			if(!successDelLiftUsage) {
+				return false;
+			}
 
-			String deleteFromLiftUsage = "DELETE FROM LiftUsage WHERE skiPassId = ?";
+			// Delete from SkiPass
+			boolean successDelSkiPass = deleteFromWhere(dbconn, "SkiPass", "skiPassId", skiPassId);
+			if(!successDelSkiPass) {
+				return false;
+			}
 
-			stmt = dbconn.prepareStatement(deleteFromLiftUsage);
-			stmt.setInt(1, skiPassId);
-			stmt.executeUpdate();
-			stmt.close();
-
-			String deleteFromSkiPass = "DELETE FROM SkiPass WHERE skiPassId = ?";
-
-			stmt = dbconn.prepareStatement(deleteFromSkiPass);
-			stmt.setInt(1, skiPassId);
-			stmt.executeUpdate();
-			stmt.close();
 		} catch (SQLException e) {
 	
 			System.err.println("*** SQLException:  "
@@ -600,7 +299,7 @@ public class SkiPass {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -613,7 +312,7 @@ public class SkiPass {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 			
 		}
@@ -621,7 +320,7 @@ public class SkiPass {
 		return true;
 	}
 
-	public void skiPassQuery(Connection dbconn, int skiPassId){
+	public boolean skiPassQuery(Connection dbconn, int skiPassId){
 		// For a given ski pass, list all lift rides and equipment rentals associated with it, along with
 		//	timestamps and return status
 
@@ -687,7 +386,7 @@ public class SkiPass {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -700,11 +399,11 @@ public class SkiPass {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
 			
 		}
-
+		return true;
 	}
 
 }

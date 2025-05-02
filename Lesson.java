@@ -1,375 +1,11 @@
 import java.sql.*;
 
-public class Lesson {
+public class Lesson extends ResortComponent{
 	public Lesson() {
 
 	}
 
-	private int createNewTransactionId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(transactionId) AS maxId FROM Transactions";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	private int createNewLessonXactDetailsId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(lessonXactDetailsId) AS maxId FROM LessonXactDetails";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	private int createNewLessonUsageId(Connection dbconn) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		int newId = 1;
-
-		try{
-			String query = "SELECT MAX(lessonUsageId) AS maxId FROM LessonUsage";
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			if(answer.next()) {
-				int maxId = answer.getInt("maxId");
-				if(!answer.wasNull()){
-					newId = maxId + 1;
-				}
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return newId;
-	}
-
-	public boolean existsMemberId(Connection dbconn, int givenMemberId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM MemberAccount WHERE memberId = " + givenMemberId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No member with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
-	public boolean existsResortPropertyId(Connection dbconn, int givenResortPropertyId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM ResortProperty WHERE resortPropertyId = " + givenResortPropertyId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No resort property with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
-	public boolean existsLessonXactDetails(Connection dbconn, int givenLessonXactDetailsId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM LessonXactDetails WHERE lessonXactDetailsId = " + givenLessonXactDetailsId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No lesson transactions with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
-	public boolean existsLessonSession(Connection dbconn, int givenLessonSessionId) {
-		Statement stmt = null;
-		ResultSet answer = null;
-		boolean found = false;
-
-		try{
-			String query = "SELECT * FROM LessonSession WHERE lessonSessionId = " + givenLessonSessionId;
-			stmt = dbconn.createStatement();
-			answer = stmt.executeQuery(query);
-
-			int numResults = 0;
-			while(answer.next() && numResults < 1) {
-				numResults++;
-			}
-
-			if(numResults == 1) {
-				found = true;
-			} else {
-				System.out.println("ERROR: No lesson sessions with this ID found!");
-			}
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not fetch query results.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if (answer != null) {
-					answer.close();
-				}
-
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-
-		return found;
-	}
-
-	public void createNewTransaction(Connection dbconn, int transactionId, int resortPropertyId, int memberId, String transactionType,
-	Timestamp xactDateTime, double amount){
-		PreparedStatement stmt = null;
-
-		try{
-			String query = "INSERT INTO Transactions " +
-                "(transactionId, resortPropertyId, memberId, transactionType, transactionDateTime, amount) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-
-			stmt = dbconn.prepareStatement(query);
-			stmt.setInt(1, transactionId);
-			stmt.setInt(2, resortPropertyId);
-			stmt.setInt(3, memberId);
-			stmt.setString(4, transactionType);
-			stmt.setTimestamp(5, xactDateTime);
-			stmt.setDouble(6, amount);
-
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-	
-			System.err.println("*** SQLException:  "
-				+ "Could not execute insertion.");
-			System.err.println("\tMessage:   " + e.getMessage());
-			System.err.println("\tSQLState:  " + e.getSQLState());
-			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
-
-		} finally {
-			try {
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Error closing the query resources.");
-				System.exit(-1);
-			}
-			
-		}
-	}
-
-	public void createLessonXactDetails(Connection dbconn, int lessonXactDetailsId, int transactionId, int remSessions) {
+	public boolean createLessonXactDetails(Connection dbconn, int lessonXactDetailsId, int transactionId, int remSessions) {
 		PreparedStatement stmt = null;
 
 		try {
@@ -391,7 +27,7 @@ public class Lesson {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -400,13 +36,13 @@ public class Lesson {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
-			
 		}
+		return true;
 	}
 
-	public void createLessonUsage(Connection dbconn, int lessonUsageId, int lessonXactDetailsId, int lessionSessionId, Date usedDate) {
+	public boolean createLessonUsage(Connection dbconn, int lessonUsageId, int lessonXactDetailsId, int lessionSessionId, Date usedDate) {
 		PreparedStatement stmt = null;
 
 		try {
@@ -429,7 +65,7 @@ public class Lesson {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -438,54 +74,64 @@ public class Lesson {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
-			
 		}
+		return true;
 	}
 
 	public boolean createLessonXact(Connection dbconn, int resortPropertyId, int memberId,
 	Timestamp xactDateTime, int amount, int remSessions) {
 		// Create Transaction Id
-		int newTransactionId = createNewTransactionId(dbconn);
+		int newTransactionId = createNewId(dbconn, "Transactions", "transactionId");
 
 		// Validate resortPropertyId, memberId
-		if(!existsMemberId(dbconn, memberId)) {
+		if(!existsId(dbconn, memberId, "MemberAccount", "memberId")) {
 			return false;
 		}
 		
-		if(!existsResortPropertyId(dbconn, resortPropertyId)){
+		if(!existsId(dbconn, resortPropertyId, "ResortProperty", "resortPropertyId")){
 			return false;
 		}
 
 		// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
-		createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Lessons", xactDateTime, amount);
+		boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Lessons", xactDateTime, amount);
+		if(!successXact) {
+			return false;
+		}
+
 
 		// Create LessonXactDetailsId
-		int newLessonXactDetailsId = createNewLessonXactDetailsId(dbconn);
+		int newLessonXactDetailsId = createNewId(dbconn, "LessonXactDetails", "lessonXactDetailsId");
 
 		// Create LessonXactDetails,  content: transactionId, numSessions, remainingSessions
 		// Logic: NumSessions = how many were used
-		createLessonXactDetails(dbconn, newLessonXactDetailsId, newTransactionId, remSessions);
+		boolean successLessonXact = createLessonXactDetails(dbconn, newLessonXactDetailsId, newTransactionId, remSessions);
+		if(!successLessonXact) {
+			return false;
+		}
 
 		return true;
 	}
 
 	public boolean useLesson(Connection dbconn, int lessonXactDetailsId, int lessonSessionId, Date usedDate) {
 		// Create lesson usage id
-		int newLessonUsage = createNewLessonUsageId(dbconn);
+		int newLessonUsage = createNewId(dbconn, "LessonUsage", "lessonUsageId");
 
 		// Validate: lessonXactDetailsId, lessonSessionId
-		if(!existsLessonXactDetails(dbconn, lessonXactDetailsId)){
+		if(!existsId(dbconn, lessonXactDetailsId, "LessonXactDetails", "lessonXactDetailsId")){
 			return false;
 		}
 
-		if(!existsLessonSession(dbconn, lessonSessionId)) {
+		if(!existsId(dbconn, lessonSessionId, "LessonSession", "lessonSessionId")) {
 			return false;
 		}
 
 		// Populate LessonUsage: lessonXactDetailsId, lessonSessionId, usedDate, attended
-		createLessonUsage(dbconn, newLessonUsage, lessonXactDetailsId, lessonSessionId, usedDate);
+		boolean successLessonUse = createLessonUsage(dbconn, newLessonUsage, lessonXactDetailsId, lessonSessionId, usedDate);
+		if(!successLessonUse) {
+			return false;
+		}
 
 		// decrement remaining sessions, increment numSessions
 		PreparedStatement stmt = null;
@@ -511,7 +157,7 @@ public class Lesson {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -520,9 +166,8 @@ public class Lesson {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
-			
 		}
 
 		return updated;
@@ -548,12 +193,12 @@ public class Lesson {
 			stmt.close();
 			answer.close();
 
-			String deleteLessonXactQuery = "DELETE FROM LessonXactDetails WHERE lessonXactDetailsId = ?";
+			// Delete LessonXact
+			boolean successDelLessonXact = deleteFromWhere(dbconn, "LessonXactDetails", "lessonXactDetailsId", lessonXactDetailsId);
+			if(!successDelLessonXact){
+				return false;
+			}
 
-			stmt = dbconn.prepareStatement(deleteLessonXactQuery);
-			stmt.setInt(1, lessonXactDetailsId);
-			stmt.executeUpdate();
-			stmt.close();
 		} catch (SQLException e) {
 	
 			System.err.println("*** SQLException:  "
@@ -561,7 +206,7 @@ public class Lesson {
 			System.err.println("\tMessage:   " + e.getMessage());
 			System.err.println("\tSQLState:  " + e.getSQLState());
 			System.err.println("\tErrorCode: " + e.getErrorCode());
-			System.exit(-1);
+			return false;
 
 		} finally {
 			try {
@@ -574,9 +219,8 @@ public class Lesson {
 				}
 			} catch (SQLException e) {
 				System.out.println("Error closing the query resources.");
-				System.exit(-1);
+				return false;
 			}
-			
 		}
 		
 		return true;

@@ -3,18 +3,18 @@
 -- =================================
 
 CREATE TABLE EmployeeRole (
-    employeeRoleId INT,
+    employeeRoleId NUMBER(*, 0),
     employeeRoleName VARCHAR2(100) NOT NULL,
     hourlyWage NUMBER(10, 2) NOT NULL,
     PRIMARY KEY (employeeRoleId)
 ); 
 
 CREATE TABLE Employee (
-    employeeId INT NOT NULL,
-    employeeRoleId INT NOT NULL,
-    employeeAssignmentId INT,
+    employeeId NUMBER(*, 0) NOT NULL,
+    employeeRoleId NUMBER(*, 0) NOT NULL,
+    employeeAssignmentId NUMBER(*, 0),
     employeeName VARCHAR2(100) NOT NULL,
-    age INT,
+    age NUMBER(3),
     gender VARCHAR2(10),
     dateOfBirth DATE NOT NULL,
     raceEthnicity VARCHAR2(20),
@@ -23,21 +23,17 @@ CREATE TABLE Employee (
 );
 
 CREATE TABLE EmployeeAssignment (
-    employeeAssignmentId INT,
-    employeeId INT NOT NULL,
-    resortPropertyId INT NOT NULL,
-    employeeRoleId INT NOT NULL,
+    employeeAssignmentId NUMBER(*, 0),
+    resortPropertyId NUMBER(*, 0) NOT NULL,
     assignmentStartDate DATE NOT NULL,
     PRIMARY KEY (employeeAssignmentId),
-    FOREIGN KEY (employeeId) REFERENCES Employee(employeeId),
-    FOREIGN KEY (resortPropertyId) REFERENCES ResortProperty(resortPropertyId),
-    FOREIGN KEY (employeeRoleId) REFERENCES EmployeeRole(employeeRoleId)
+    FOREIGN KEY (resortPropertyId) REFERENCES ResortProperty(resortPropertyId)
 );
 
 CREATE TABLE EmployeeTimesheet (
-    employeeTimesheetId INT,
-    employeeId INT NOT NULL,
-    employeeRoleId INT NOT NULL,
+    employeeTimesheetId NUMBER(*, 0),
+    employeeId NUMBER(*, 0) NOT NULL,
+    employeeRoleId NUMBER(*, 0) NOT NULL,
     monthYear DATE NOT NULL,
     hoursWorked NUMBER(6,2) NOT NULL,
     PRIMARY KEY (employeeTimesheetId),
@@ -46,8 +42,8 @@ CREATE TABLE EmployeeTimesheet (
 );
 
 CREATE TABLE PayrollTransaction (
-    payrollTransactionId INT,
-    employeeTimesheetId INT NOT NULL,
+    payrollTransactionId NUMBER(*, 0),
+    employeeTimesheetId NUMBER(*, 0) NOT NULL,
     paymentDate DATE NOT NULL,
     amountPayed NUMBER(10,2) NOT NULL,
     PRIMARY KEY (payrollTransactionId),
@@ -61,7 +57,7 @@ CREATE TABLE PayrollTransaction (
 -- =================================
 
 CREATE TABLE ResortProperty (
-    resortPropertyId INT,
+    resortPropertyId NUMBER(*, 0),
     propertyType VARCHAR2(50) NOT NULL,
     propertyName VARCHAR2(100) NOT NULL,
     physicalLocation VARCHAR2(200) NOT NULL,
@@ -70,21 +66,21 @@ CREATE TABLE ResortProperty (
 );
 
 CREATE TABLE Shuttle (
-    shuttleId INT,
-    resortPropertyId INT NOT NULL,
+    shuttleId NUMBER(*, 0),
+    resortPropertyId NUMBER(*, 0) NOT NULL,
     licensePlate VARCHAR2(20) NOT NULL,
-    capacity INT NOT NULL,
+    capacity NUMBER(*, 0) NOT NULL,
     PRIMARY KEY (shuttleId),
     FOREIGN KEY (resortPropertyId) REFERENCES ResortProperty(resortPropertyId)
 );
 
 CREATE TABLE ShuttleUsage (
-    shuttleUsageId INT,
-    shuttleId INT NOT NULL,
+    shuttleUsageId NUMBER(*, 0),
+    shuttleId NUMBER(*, 0) NOT NULL,
     fromLocation VARCHAR2(100) NOT NULL,
     toLocation VARCHAR2(100) NOT NULL,
     dateTime TIMESTAMP NOT NULL,
-    numberPassengers INT NOT NULL,
+    numberPassengers NUMBER(*, 0) NOT NULL,
     PRIMARY KEY (shuttleUsageId),
     FOREIGN KEY (shuttleId) REFERENCES Shuttle(shuttleId)
 );
@@ -95,9 +91,9 @@ CREATE TABLE ShuttleUsage (
 -- ================================= 
 
 CREATE TABLE Transactions (                 -- <------- using transaction(s) with an s because Transaction is a reserved word in SQL
-    transactionId INT,
-    resortPropertyId INT NOT NULL,
-    memberId INT NOT NULL,
+    transactionId NUMBER(*, 0),
+    resortPropertyId NUMBER(*, 0) NOT NULL,
+    memberId NUMBER(*, 0) NOT NULL,
     transactionType VARCHAR2(50) NOT NULL,
     transactionDateTime TIMESTAMP NOT NULL,
     amount NUMBER(10,2) NOT NULL,
@@ -107,9 +103,9 @@ CREATE TABLE Transactions (                 -- <------- using transaction(s) wit
 );
 
 CREATE TABLE RentalXactDetails (
-    rentalXactDetailsId INT,
-    transactionId INT NOT NULL,
-    skiPassId INT NOT NULL,
+    rentalXactDetailsId NUMBER(*, 0),
+    transactionId NUMBER(*, 0) NOT NULL,
+    skiPassId NUMBER(*, 0) NOT NULL,
     returnStatus NUMBER(1) NOT NULL, -- 0 if not returned, 1 if returned
     dateReturned DATE,
     PRIMARY KEY (rentalXactDetailsId),
@@ -118,8 +114,8 @@ CREATE TABLE RentalXactDetails (
 );
 
 CREATE TABLE LodgeXactDetails (
-    lodgeXactDetailsId INT,
-    transactionId INT NOT NULL,
+    lodgeXactDetailsId NUMBER(*, 0),
+    transactionId NUMBER(*, 0) NOT NULL,
     stayStartDate DATE NOT NULL,
     stayEndDate DATE NOT NULL,
     roomType VARCHAR2(50) NOT NULL,
@@ -128,18 +124,18 @@ CREATE TABLE LodgeXactDetails (
 );
 
 CREATE TABLE LessonXactDetails (
-    lessonXactDetailsId INT,
-    transactionId INT NOT NULL,
-    numSessions INT NOT NULL,
-    remainingSessions INT NOT NULL,
+    lessonXactDetailsId NUMBER(*, 0),
+    transactionId NUMBER(*, 0) NOT NULL,
+    numSessions NUMBER(*, 0) NOT NULL,
+    remainingSessions NUMBER(*, 0) NOT NULL,
     PRIMARY KEY (lessonXactDetailsId),
     FOREIGN KEY (transactionId) REFERENCES Transactions(transactionId)
 );
 
 CREATE TABLE SkiPassXactDetails (
-    skiPassXactDetailsId INT,
-    transactionId INT NOT NULL,
-    skiPassId INT NOT NULL,
+    skiPassXactDetailsId NUMBER(*, 0),
+    transactionId NUMBER(*, 0) NOT NULL,
+    skiPassId NUMBER(*, 0) NOT NULL,
     PRIMARY KEY (skiPassXactDetailsId),
     FOREIGN KEY (transactionId) REFERENCES Transactions(transactionId),
     FOREIGN KEY (skiPassId) REFERENCES SkiPass(skiPassId)
@@ -149,34 +145,30 @@ CREATE TABLE SkiPassXactDetails (
 -- =================================
 -- MEMBER TABLES
 -- =================================
-
-CREATE TABLE MemberAccount (
-    memberId INT,
-    name VARCHAR2(100) NOT NULL,
-    phoneNumber VARCHAR2(20),
-    email VARCHAR2(100),
-    dateOfBirth DATE,
-    emergencyContactId INT,
-    PRIMARY KEY (memberId),
-    FOREIGN KEY (emergencyContactId) REFERENCES EmergencyContact(emergencyContactId)
-);
-
 CREATE TABLE EmergencyContact (
-    emergencyContactId INT,
+    emergencyContactId NUMBER(*, 0),
     name VARCHAR2(100) NOT NULL,
     phoneNumber VARCHAR2(20) NOT NULL,
     PRIMARY KEY (emergencyContactId)
 );
 
-
-
+CREATE TABLE MemberAccount (
+    memberId NUMBER(*, 0),
+    name VARCHAR2(100) NOT NULL,
+    phoneNumber VARCHAR2(20),
+    email VARCHAR2(100),
+    dateOfBirth DATE,
+    emergencyContactId NUMBER(*, 0),
+    PRIMARY KEY (memberId),
+    FOREIGN KEY (emergencyContactId) REFERENCES EmergencyContact(emergencyContactId)
+);
 
 -- =================================
 -- SKI PASSES (includes lift) TABLES
 -- =================================
 
 CREATE TABLE SkiPass (
-    skiPassId INT,
+    skiPassId NUMBER(*, 0),
     numberOfUses INT NOT NULL,
     remainingUses INT NOT NULL,
     expirationDate DATE NOT NULL,
@@ -184,18 +176,18 @@ CREATE TABLE SkiPass (
 );
 
 CREATE TABLE SkiPassArchive (
-    skiPassArchiveId INT,
-    memberId INT,
-    numberOfUses INT NOT NULL,
-    PRIMARY KEY (skiPassId),
-    FOREIGN KEY (nemberId) REFERENCES MemberAccount(memberId)
+    skiPassArchiveId NUMBER(*, 0),
+    memberId NUMBER(*, 0),
+    numberOfUses NUMBER(*, 0) NOT NULL,
+    PRIMARY KEY (skiPassArchiveId),
+    FOREIGN KEY (memberId) REFERENCES MemberAccount(memberId)
 );
 
 CREATE TABLE LiftUsage (
-    liftUsageId INT,
-    liftId INT NOT NULL,
-    skiPassId INT NOT NULL,
-    memberId INT NOT NULL,
+    liftUsageId NUMBER(*, 0),
+    liftId NUMBER(*, 0) NOT NULL,
+    skiPassId NUMBER(*, 0) NOT NULL,
+    memberId NUMBER(*, 0) NOT NULL,
     usageDateTime TIMESTAMP NOT NULL,
     PRIMARY KEY (liftUsageId),
     FOREIGN KEY (liftId) REFERENCES Lift(liftId),
@@ -204,7 +196,7 @@ CREATE TABLE LiftUsage (
 );
 
 CREATE TABLE Lift (
-    liftId INT,
+    liftId NUMBER(*, 0),
     liftName VARCHAR2(100) NOT NULL,
     abilityLevel VARCHAR2(20) NOT NULL, -- beginner, intermediate, expert
     openTime VARCHAR2(10) NOT NULL,
@@ -214,16 +206,16 @@ CREATE TABLE Lift (
 );
 
 CREATE TABLE LiftTrailAccess (
-    liftTrailAccessId INT,
-    liftId INT NOT NULL,
-    trailId INT NOT NULL,
+    liftTrailAccessId NUMBER(*, 0),
+    liftId NUMBER(*, 0) NOT NULL,
+    trailId NUMBER(*, 0) NOT NULL,
     PRIMARY KEY (liftTrailAccessId),
     FOREIGN KEY (liftId) REFERENCES Lift(liftId),
     FOREIGN KEY (trailId) REFERENCES Trail(trailId)
 );
 
 CREATE TABLE Trail (
-    trailId INT,
+    trailId NUMBER(*, 0),
     trailName VARCHAR2(100) NOT NULL,
     startLoc VARCHAR2(100) NOT NULL,
     endLoc VARCHAR2(100) NOT NULL,
@@ -239,8 +231,8 @@ CREATE TABLE Trail (
 -- =================================
 
 CREATE TABLE RentalInventory (
-    itemId INT,
-    resortPropertyId INT NOT NULL,
+    itemId NUMBER(*, 0),
+    resortPropertyId NUMBER(*, 0) NOT NULL,
     itemType VARCHAR2(50) NOT NULL, -- ski, snowboard, poles, boots, etc.
     itemSize VARCHAR2(30) NOT NULL, -- varies by item type
     archived NUMBER(1) NOT NULL, -- 0 not archived, 1 archived
@@ -249,20 +241,20 @@ CREATE TABLE RentalInventory (
 );
 
 CREATE TABLE ItemInRental (
-    itemInRentalId INT,
-    itemId INT NOT NULL,
-    rentalXactDetailsId INT NOT NULL,
+    itemInRentalId NUMBER(*, 0),
+    itemId NUMBER(*, 0) NOT NULL,
+    rentalXactDetailsId NUMBER(*, 0) NOT NULL,
     PRIMARY KEY (itemInRentalId),
     FOREIGN KEY (itemId) REFERENCES RentalInventory(itemId),
     FOREIGN KEY (rentalXactDetailsId) REFERENCES RentalXactDetails(rentalXactDetailsId)
 );
 
 CREATE TABLE RentalChangeLog (
-    rentalChangeLogId INT,
-    itemId INT NOT NULL,
+    rentalChangeLogId NUMBER(*, 0),
+    itemId NUMBER(*, 0) NOT NULL,
     itemType VARCHAR2(50) NOT NULL, -- ski, snowboard, poles, boots, etc.
     itemSize VARCHAR2(30) NOT NULL, -- varies by item type
-    changeDate DATE NOT NULL
+    changeDate DATE NOT NULL,
     PRIMARY KEY (rentalChangeLogId),
     FOREIGN KEY (itemId) REFERENCES RentalInventory(itemId)
 );
@@ -272,24 +264,24 @@ CREATE TABLE RentalChangeLog (
 -- =================================
 
 CREATE TABLE LessonInstructor (
-    instructorId INT,
-    employeeId INT NOT NULL,
+    instructorId NUMBER(*, 0),
+    employeeId NUMBER(*, 0) NOT NULL,
     instructorLevel VARCHAR2(20) NOT NULL, -- Level I, II, III
     PRIMARY KEY (instructorId),
     FOREIGN KEY (employeeId) REFERENCES Employee(employeeId)
 );
 
 CREATE TABLE LessonType (
-    lessonTypeId INT,
+    lessonTypeId NUMBER(*, 0),
     lessonTypeName VARCHAR2(100) NOT NULL,
     isPrivate NUMBER(1) NOT NULL, -- 0 for group, 1 for private
     PRIMARY KEY (lessonTypeId)
 );
 
 CREATE TABLE LessonSession (
-    lessonSessionId INT,
-    instructorId INT NOT NULL,
-    lessonTypeId INT NOT NULL,
+    lessonSessionId NUMBER(*, 0),
+    instructorId NUMBER(*, 0) NOT NULL,
+    lessonTypeId NUMBER(*, 0) NOT NULL,
     sessionDate DATE NOT NULL,
     startTime VARCHAR2(10) NOT NULL,
     endTime VARCHAR2(10) NOT NULL,
@@ -299,9 +291,9 @@ CREATE TABLE LessonSession (
 );
 
 CREATE TABLE LessonUsage (
-    lessonUsageId INT,
-    lessonXactDetailsId INT NOT NULL,
-    lessonSessionId INT NOT NULL,
+    lessonUsageId NUMBER(*, 0),
+    lessonXactDetailsId NUMBER(*, 0) NOT NULL,
+    lessonSessionId NUMBER(*, 0) NOT NULL,
     usedDate DATE NOT NULL,
     attended NUMBER(1) NOT NULL, -- 0 for no, 1 for yes
     PRIMARY KEY (lessonUsageId),

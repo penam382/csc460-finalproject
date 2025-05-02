@@ -42,8 +42,10 @@ TODO:
 
 
 Notes as I code:
-- do we have to check if like phone number is a valid "XXX-XXX-XXXX" type? might be extra work tho if not needed.
-- same idea for email, is @xxx.com needed? im guessing maybe not (hopefully not but wanted to note it just incase)
-- does the way that java handles the date the same way that sql handles dates? same format and all? (i will look into this)
+- do we have to check if like phone number is a valid "XXX-XXX-XXXX" type? might be extra work tho if not needed. -I'm fine with not checking this...
+- same idea for email, is @xxx.com needed? im guessing maybe not (hopefully not but wanted to note it just incase) -I'm also fine not checking this...
+- does the way that java handles the date the same way that sql handles dates? same format and all? (i will look into this) -Yeah I'm not sure either... tbd
 
-- im like 85% done with the Member class, i will pick back up there since it got late
+- im like 85% done with the Member class, i will pick back up there since it got late - thanks!
+
+Seth Notes 5/2

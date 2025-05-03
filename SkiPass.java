@@ -208,6 +208,52 @@ public class SkiPass extends ResortComponent{
 		return updated;
 	}
 
+	public boolean hasRemainingUses(Connection dbconn, int skiPassId) {
+		PreparedStatement stmt = null;
+		ResultSet answer = null;
+		boolean hasUses = false;
+		
+		try {
+			String query = "SELECT remainingUses FROM SkiPass WHERE skiPassId = ?";
+			
+			stmt = dbconn.prepareStatement(query);
+			stmt.setInt(1, skiPassId);
+			
+			answer = stmt.executeQuery();
+			
+			if (answer.next()) {
+				int remainingUses = answer.getInt("remainingUses");
+				if (remainingUses > 0) {
+					hasUses = true;
+				}
+			} else {
+				System.out.println("ERROR: Ski pass not found.");
+				return false;
+			} 
+		} catch (SQLException e) {
+			System.err.println("*** SQLException:  "
+				+ "Could not execute query.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+		}
+		
+		return hasUses;
+	}
+
 	public boolean deleteSkiPass(Connection dbconn, int skiPassId) {
 		PreparedStatement stmt = null;
 		ResultSet answer = null;

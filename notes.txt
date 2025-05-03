@@ -64,3 +64,11 @@ left in specific classes tended to have components specific to that class.
 	- check levels of certain trails / lifts
 	- level of instructors
 	- etc
+
+
+
+Marco notes 5/2
+- it might be helpful to have a debug method that checks all the tables with a memberid to make sure that it got deleted properly
+	- we dont want to have any lingering memberids that should already be deleted
+
+- i will look into potentially making the delete method use private methods to make it shorter

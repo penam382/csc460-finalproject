@@ -165,6 +165,7 @@ public class Member {
             }
         }
     }
+    
 
     private boolean createMemberAccount(Connection dbconn, int memberId, String name, String phoneNumber, 
                                      String email, Date dateOfBirth, int emergencyContactId) {
@@ -209,22 +210,278 @@ public class Member {
         }
     }
 
-    /*
-     * i didnt get to this since it got late but this is where i am going to pick up
-     */
+    
     public boolean deleteMember(Connection dbconn, int memberId) throws SQLException {
-        // Check member has no active ski passes
+        // Initialize classes to access their methods
+        SkiPass skiPass = new SkiPass();
+        Rental rental = new Rental();
+        Lesson lesson = new Lesson();
         
+        // Check member has no active ski passes
+        PreparedStatement skiPassStmt = null;
+        ResultSet answer = null;
+        
+        try {
+            // Find all ski passes associated with this member
+            String query = "SELECT sp.skiPassId " +
+                        "FROM SkiPass sp " +
+                        "JOIN SkiPassXactDetails spxd ON sp.skiPassId = spxd.skiPassId " +
+                        "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
+                        "WHERE t.memberId = ?";
+            
+            skiPassStmt = dbconn.prepareStatement(query);
+            skiPassStmt.setInt(1, memberId);
+            answer = skiPassStmt.executeQuery();
+            
+            // Check each ski pass for remaining uses
+            while (answer.next()) {
+                int skiPassId = answer.getInt("skiPassId");
+                if (skiPass.hasRemainingUses(dbconn, skiPassId)) {
+                    System.out.println("ERROR: Member has ski passes with remaining uses. Cannot delete account.");
+                    return false;
+                }
+            }
+        } finally {
+            if (answer != null) {
+                answer.close();
+            }
+            if (skiPassStmt != null) {
+                skiPassStmt.close();
+            }
+        }
 
         // Check member has no open rentals
+        PreparedStatement rentalStmt = null;
+        ResultSet rentalAnswer = null;
         
+        try {
+            String query = "SELECT COUNT(*) AS openRentalCount " +
+                        "FROM RentalXactDetails rxd " +
+                        "JOIN Transactions t ON rxd.transactionId = t.transactionId " +
+                        "WHERE t.memberId = ? AND rxd.returnStatus = 0";
+            
+            rentalStmt = dbconn.prepareStatement(query);
+            rentalStmt.setInt(1, memberId);
+            rentalAnswer = rentalStmt.executeQuery();
+            
+            if (rentalAnswer.next() && rentalAnswer.getInt("openRentalCount") > 0) {
+                System.out.println("ERROR: Member has open rental records. Cannot delete account.");
+                return false;
+            }
+        } finally {
+            if (rentalAnswer != null) {
+                rentalAnswer.close();
+            }
+            if (rentalStmt != null) {
+                rentalStmt.close();
+            }
+        }
 
         // Check member has no unused lesson sessions
+        PreparedStatement lessonStmt = null;
+        ResultSet lessonAnswer = null;
         
+        try {
+            String query = "SELECT COUNT(*) AS unusedLessonCount " +
+                        "FROM LessonXactDetails lxd " +
+                        "JOIN Transactions t ON lxd.transactionId = t.transactionId " +
+                        "WHERE t.memberId = ? AND lxd.remainingSessions > 0";
+            
+            lessonStmt = dbconn.prepareStatement(query);
+            lessonStmt.setInt(1, memberId);
+            lessonAnswer = lessonStmt.executeQuery();
+            
+            if (lessonAnswer.next() && lessonAnswer.getInt("unusedLessonCount") > 0) {
+                System.out.println("ERROR: Member has unused lesson sessions. Cannot delete account.");
+                return false;
+            }
+        } finally {
+            if (lessonAnswer != null) {
+                lessonAnswer.close();
+            }
+            if (lessonStmt != null) {
+                lessonStmt.close();
+            }
+        }
 
-        // If all checks pass, remove all related entries, and record
-        return true;
+
+        /**
+         * If all checks pass, begin deletion process
+         * 
+         * DELETION PROCESS:
+         * 1. SkiPass 
+         * 2. RentalXactDetails
+         * 3. LessonXactDetails
+         * 4. LodgeXactDetails
+         * 5. LiftUsage
+         * 6. Transactions
+         * 7. SkiPassArchive
+         * 8. MemberAccount
+         */
+        // Delete all ski passes for this member
+        PreparedStatement getSkiPassStmt = null;
+        ResultSet skiPassResult = null;
+        try {
+            String query = "SELECT sp.skiPassId " +
+                        "FROM SkiPass sp " +
+                        "JOIN SkiPassXactDetails spxd ON sp.skiPassId = spxd.skiPassId " +
+                        "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
+                        "WHERE t.memberId = ?";
+            
+            getSkiPassStmt = dbconn.prepareStatement(query);
+            getSkiPassStmt.setInt(1, memberId);
+            skiPassResult = getSkiPassStmt.executeQuery();
+            
+            while (skiPassResult.next()) {
+                int skiPassId = skiPassResult.getInt("skiPassId");
+                boolean success = skiPass.deleteSkiPass(dbconn, skiPassId);
+                if (!success) {
+                    System.out.println("ERROR: Failed to delete ski pass: " + skiPassId);
+                    return false;
+                }
+            }
+        } finally {
+            if (skiPassResult != null) {
+                skiPassResult.close();
+            }
+            if (getSkiPassStmt != null) {
+                getSkiPassStmt.close();
+            }
+        }
+        
+        // Delete all rentals for this member 
+        PreparedStatement getRentalStmt = null;
+        ResultSet rentalResult = null;
+        try {
+            String query = "SELECT rxd.rentalXactDetailsId " +
+                        "FROM RentalXactDetails rxd " +
+                        "JOIN Transactions t ON rxd.transactionId = t.transactionId " +
+                        "WHERE t.memberId = ?";
+            
+            getRentalStmt = dbconn.prepareStatement(query);
+            getRentalStmt.setInt(1, memberId);
+            rentalResult = getRentalStmt.executeQuery();
+            
+            while (rentalResult.next()) {
+                int rentalXactDetailsId = rentalResult.getInt("rentalXactDetailsId");
+                boolean success = rental.deleteRentalXact(dbconn, rentalXactDetailsId);
+                if (!success) {
+                    System.out.println("ERROR: Failed to delete rental: " + rentalXactDetailsId);
+                    return false;
+                }
+            }
+        } finally {
+            if (rentalResult != null) {
+                rentalResult.close();
+            }
+            if (getRentalStmt != null) {
+                getRentalStmt.close();
+            }
+        }
+        
+        // Delete lesson transactions
+        PreparedStatement getLessonStmt = null;
+        ResultSet lessonResult = null;
+        try {
+            String query = "SELECT lxd.lessonXactDetailsId " +
+                        "FROM LessonXactDetails lxd " +
+                        "JOIN Transactions t ON lxd.transactionId = t.transactionId " +
+                        "WHERE t.memberId = ?";
+            
+            getLessonStmt = dbconn.prepareStatement(query);
+            getLessonStmt.setInt(1, memberId);
+            lessonResult = getLessonStmt.executeQuery();
+            
+            while (lessonResult.next()) {
+                int lessonXactDetailsId = lessonResult.getInt("lessonXactDetailsId");
+                boolean success = lesson.deleteLessonXact(dbconn, lessonXactDetailsId);
+                if (!success) {
+                    System.out.println("ERROR: Failed to delete lesson: " + lessonXactDetailsId);
+                    return false;
+                }
+            }
+        } finally {
+            if (lessonResult != null) {
+                lessonResult.close();
+            }
+            if (getLessonStmt != null) {
+                getLessonStmt.close();
+            }
+        }
+        
+        // Delete lodge transactions
+        PreparedStatement lodgeDelStmt = null;
+        try {
+            String query = "DELETE FROM LodgeXactDetails WHERE transactionId IN " +
+                        "(SELECT transactionId FROM Transactions WHERE memberId = ?)";
+            
+            lodgeDelStmt = dbconn.prepareStatement(query);
+            lodgeDelStmt.setInt(1, memberId);
+            lodgeDelStmt.executeUpdate();
+        } finally {
+            if (lodgeDelStmt != null) {
+                lodgeDelStmt.close();
+            }
+        }
+        
+        // Delete lift usage records
+        PreparedStatement liftUsageStmt = null;
+        try {
+            String query = "DELETE FROM LiftUsage WHERE memberId = ?";
+            liftUsageStmt = dbconn.prepareStatement(query);
+            liftUsageStmt.setInt(1, memberId);
+            liftUsageStmt.executeUpdate();
+        } finally {
+            if (liftUsageStmt != null) {
+                liftUsageStmt.close();
+            }
+        }
+
+        
+        
+        // Delete all transactions
+        PreparedStatement transactionStmt = null;
+        try {
+            String query = "DELETE FROM Transactions WHERE memberId = ?";
+            transactionStmt = dbconn.prepareStatement(query);
+            transactionStmt.setInt(1, memberId);
+            transactionStmt.executeUpdate();
+        } finally {
+            if (transactionStmt != null) {
+                transactionStmt.close();
+            }
+        }
+
+        // Delete ski pass archive records
+        PreparedStatement skiPassArchiveStmt = null;
+        try {
+            String query = "DELETE FROM SkiPassArchive WHERE memberId = ?";
+            skiPassArchiveStmt = dbconn.prepareStatement(query);
+            skiPassArchiveStmt.setInt(1, memberId);
+            skiPassArchiveStmt.executeUpdate();
+        } finally {
+            if (skiPassArchiveStmt != null) {
+                skiPassArchiveStmt.close();
+            }
+        }
+        
+        // delete the member account
+        PreparedStatement deleteMemberStmt = null;
+        try {
+            String query = "DELETE FROM MemberAccount WHERE memberId = ?";
+            deleteMemberStmt = dbconn.prepareStatement(query);
+            deleteMemberStmt.setInt(1, memberId);
+            int rowsDeleted = deleteMemberStmt.executeUpdate();
+            
+            return (rowsDeleted > 0);
+        } finally {
+            if (deleteMemberStmt != null) {
+                deleteMemberStmt.close();
+            }
+        }
     }
+
+    
 
     public boolean updatePhoneNumber(Connection dbconn, int memberId, String newPhoneNumber) {
         PreparedStatement stmt = null;
@@ -373,12 +630,71 @@ public class Member {
      * Post-condition: 
      *      Returns a string with all the ski sessions information for the member.
      */
-    public String memberQuery(Connection dbconn, int memberId) {
-        // For a given member, list all the ski sessions they have purchased, including the number
-        //  of remaining sessions, instructor name, and scheduled time
+    public boolean memberQuery(Connection dbconn, int memberId) {
+        PreparedStatement stmt = null;
+        ResultSet answer = null;
         
-        // check if memberId in DB
-        return "";
+        try {
+            String query = "SELECT ls.sessionDate, ls.startTime, ls.endTime, " +
+                        "e.employeeName AS instructorName, " +
+                        "lxd.remainingSessions " +
+                        "FROM Transactions t " +
+                        "JOIN LessonXactDetails lxd ON t.transactionId = lxd.transactionId " +
+                        "JOIN LessonUsage lu ON lxd.lessonXactDetailsId = lu.lessonXactDetailsId " +
+                        "JOIN LessonSession ls ON lu.lessonSessionId = ls.lessonSessionId " +
+                        "JOIN LessonInstructor li ON ls.instructorId = li.instructorId " +
+                        "JOIN Employee e ON li.employeeId = e.employeeId " +
+                        "WHERE t.memberId = ? " +
+                        "ORDER BY ls.sessionDate, ls.startTime";
+            
+            stmt = dbconn.prepareStatement(query);
+            stmt.setInt(1, memberId);
+            answer = stmt.executeQuery();
+            
+            System.out.println("\nSki Lessons for Member ID: " + memberId);
+            System.out.println("Date | Time | Instructor | Remaining Sessions");
+            
+            boolean hasLessons = false;
+            
+            while (answer.next()) {
+                hasLessons = true;
+                Date sessionDate = answer.getDate("sessionDate");
+                String startTime = answer.getString("startTime");
+                String endTime = answer.getString("endTime");
+                String instructorName = answer.getString("instructorName");
+                int remainingSessions = answer.getInt("remainingSessions");
+                System.out.println("[ " + 
+                                sessionDate + " | " + 
+                                startTime + "-" + endTime + " | " +
+                                instructorName + " | " +
+                                remainingSessions + " ]");
+            }
+            
+            if (!hasLessons) {
+                System.out.println("No lessons found for this member.");
+            }
+                        
+            return true;
+        } catch (SQLException e) {
+            System.err.println("*** SQLException:  "
+                + "Could not perform this query due to an exception.");
+            System.err.println("\tMessage:   " + e.getMessage());
+            System.err.println("\tSQLState:  " + e.getSQLState());
+            System.err.println("\tErrorCode: " + e.getErrorCode());
+            return false;
+        } finally {
+            try {
+                if (answer != null) {
+                    answer.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing the query resources.");
+                return false;
+            }
+        }
     }
 
     // Method to potentially help the UI

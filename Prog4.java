@@ -101,6 +101,8 @@ public class Prog4 {
     public String trailQuery(){
         // List all open trails suitable for intermediate-level skiers, along with their
         //  category and connected lifts that are currently operational
+
+        return "";
     }
 
 }

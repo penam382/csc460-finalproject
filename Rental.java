@@ -58,7 +58,7 @@ public class Rental extends ResortComponent{
 		return true;
 	}
 
-	public boolean createNewRentalXactDetails(Connection dbconn, int rentalXactDetailsId, int transactionId, int skiPassId) {
+	private boolean createNewRentalXactDetails(Connection dbconn, int rentalXactDetailsId, int transactionId, int skiPassId) {
 		PreparedStatement stmt = null;
 
 		try{

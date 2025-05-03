@@ -6,7 +6,7 @@ public class SkiPass extends ResortComponent{
 
 	}
 
-	public boolean createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate) {
+	private boolean createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate) {
 		PreparedStatement stmt = null;
 
 		try{
@@ -43,7 +43,7 @@ public class SkiPass extends ResortComponent{
 		return true;
 	}
 
-	public boolean createNewSkiPassXactDetails(Connection dbconn, int skiPassXactDetailsId, int transactionId, int skiPassId) {
+	private boolean createNewSkiPassXactDetails(Connection dbconn, int skiPassXactDetailsId, int transactionId, int skiPassId) {
 		PreparedStatement stmt = null;
 
 		try{

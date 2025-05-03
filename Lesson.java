@@ -5,7 +5,7 @@ public class Lesson extends ResortComponent{
 
 	}
 
-	public boolean createLessonXactDetails(Connection dbconn, int lessonXactDetailsId, int transactionId, int remSessions) {
+	private boolean createLessonXactDetails(Connection dbconn, int lessonXactDetailsId, int transactionId, int remSessions) {
 		PreparedStatement stmt = null;
 
 		try {
@@ -42,13 +42,27 @@ public class Lesson extends ResortComponent{
 		return true;
 	}
 
-	public boolean createLessonUsage(Connection dbconn, int lessonUsageId, int lessonXactDetailsId, int lessionSessionId, Date usedDate) {
+	private boolean createLessonUsage(Connection dbconn, int lessonUsageId, int lessonXactDetailsId, int lessionSessionId, Date usedDate) {
 		PreparedStatement stmt = null;
+		ResultSet answer = null;
+		int remainingSessions = 0;
 
 		try {
+			String remSessionsQuery = "SELECT remainingSessions FROM LessonXactDetails WHERE lessonXactDetailsId = ?";
+			stmt = dbconn.prepareStatement(remSessionsQuery);
+			stmt.setInt(1, lessonXactDetailsId);
+			answer = stmt.executeQuery();
+
+			if(answer.next()) {
+				remainingSessions = answer.getInt("remainingSessions");
+			} else {
+				System.out.println("Cannot find the Lesson Transaction.");
+				return false;
+			}
+
 			String query = "INSERT INTO LessonUsage " +
-						   "(lessonUsageId, lessonXactDetailsId, lessonSessionId, usedDate, attended) " +
-						   "VALUES (?, ?, ?, ?, ?)";
+						   "(lessonUsageId, lessonXactDetailsId, lessonSessionId, usedDate, attended, remSessions) " +
+						   "VALUES (?, ?, ?, ?, ?, ?)";
 
 			stmt = dbconn.prepareStatement(query);
 			stmt.setInt(1, lessonUsageId);
@@ -56,6 +70,7 @@ public class Lesson extends ResortComponent{
 			stmt.setDate(3, usedDate);
 			stmt.setInt(4, lessionSessionId);
 			stmt.setInt(5, 1);
+			stmt.setInt(6, remainingSessions);
 
 			stmt.executeUpdate();
 		} catch (SQLException e) {

@@ -25,8 +25,8 @@ TODO:
 - Write Classes for all components with relevant Add/Update/Delete Components OR are part of queries
 - Write UI code in Prog4
 DONE - Go in and physically create tables in Oracle on chosen account
-- Populate Entries into tables
-- Test & Fix Existing code
+DONE - Populate Entries into tables
+- Create Test Suite to Test & Fix Existing code
 	- Try all functionalities
 	- Try all queries
 - Complete design.pdf
@@ -58,3 +58,9 @@ We could potentially work to move more things up to the superclass,
 but these are the ones that I found are obviously repeating. Moving them
 to superclass decreased code a ton already... The other functionality that i
 left in specific classes tended to have components specific to that class.
+
+- Do we need assertions on some things: (Would suck lol)
+	- check sizing of certain rental items
+	- check levels of certain trails / lifts
+	- level of instructors
+	- etc

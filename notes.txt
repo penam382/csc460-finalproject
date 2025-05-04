@@ -26,9 +26,9 @@ DONE - Write Classes for all components with relevant Add/Update/Delete Componen
 - Write UI code in Prog4
 DONE - Go in and physically create tables in Oracle on chosen account
 DONE - Populate Entries into tables
-- Create Test Suite to Test & Fix Existing code
-	- Try all functionalities
-	- Try all queries
+DONE - Create Test Suite to Test & Fix Existing code
+	DONE - Try all functionalities
+	DONE - Try all queries
 - Complete design.pdf
 	- E-R Diagram (final)
 	- Logical DB design
@@ -72,3 +72,8 @@ Marco notes 5/2
 	- we dont want to have any lingering memberids that should already be deleted
 
 - i will look into potentially making the delete method use private methods to make it shorter
+
+Seth Notes 5/3
+I have tested and debugged: Member, SkiPass, Equipment, Rental, and Lesson
+All of them work as expected (some edge cases aren't tested)
+We should be good to create the UI now, using examples from the testing file (functionalityTest.java)

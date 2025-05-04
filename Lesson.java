@@ -67,8 +67,8 @@ public class Lesson extends ResortComponent{
 			stmt = dbconn.prepareStatement(query);
 			stmt.setInt(1, lessonUsageId);
 			stmt.setInt(2, lessonXactDetailsId);
-			stmt.setDate(3, usedDate);
-			stmt.setInt(4, lessionSessionId);
+			stmt.setInt(3, lessionSessionId);
+			stmt.setDate(4, usedDate);
 			stmt.setInt(5, 1);
 			stmt.setInt(6, remainingSessions);
 
@@ -96,7 +96,7 @@ public class Lesson extends ResortComponent{
 	}
 
 	public boolean createLessonXact(Connection dbconn, int resortPropertyId, int memberId,
-	Timestamp xactDateTime, int amount, int remSessions) {
+	Timestamp xactDateTime, double amount, int remSessions) {
 		// Create Transaction Id
 		int newTransactionId = createNewId(dbconn, "Transactions", "transactionId");
 
@@ -112,6 +112,7 @@ public class Lesson extends ResortComponent{
 		// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
 		boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Lessons", xactDateTime, amount);
 		if(!successXact) {
+			System.out.println("ERROR: Couldn't create transaction");
 			return false;
 		}
 
@@ -123,6 +124,7 @@ public class Lesson extends ResortComponent{
 		// Logic: NumSessions = how many were used
 		boolean successLessonXact = createLessonXactDetails(dbconn, newLessonXactDetailsId, newTransactionId, remSessions);
 		if(!successLessonXact) {
+			System.out.println("ERROR: Couldn't create transaction");
 			return false;
 		}
 
@@ -153,7 +155,7 @@ public class Lesson extends ResortComponent{
 		boolean updated = false;
 
 		try {
-			String query = "UPDATE LessonXactDetails SET remainingSessions = remainingSessions  - 1 " +
+			String query = "UPDATE LessonXactDetails SET remainingSessions = remainingSessions  - 1, numSessions = numSessions + 1 " +
 			"WHERE lessonXactDetailsId = ?";
 
 			stmt = dbconn.prepareStatement(query);
@@ -200,7 +202,7 @@ public class Lesson extends ResortComponent{
 			answer = stmt.executeQuery();
 
 			// End if Lesson Xact is not deletable
-			if(answer.next()) {
+			if(!answer.next()) {
 				System.out.println("Error: This lesson transaction is not deletable.");
 				return false;
 			}

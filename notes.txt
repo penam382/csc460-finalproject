@@ -22,7 +22,7 @@ Also, there are tables that i think we need to populate on our own
 
 
 TODO:
-- Write Classes for all components with relevant Add/Update/Delete Components OR are part of queries
+DONE - Write Classes for all components with relevant Add/Update/Delete Components OR are part of queries
 - Write UI code in Prog4
 DONE - Go in and physically create tables in Oracle on chosen account
 DONE - Populate Entries into tables

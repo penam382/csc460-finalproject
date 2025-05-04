@@ -19,14 +19,17 @@ public class Equipment extends ResortComponent {
 
 		try {
 			String query = "INSERT INTO RentalInventory " +
-						   "(itemId, resortPropertyId, itemType, itemSize) " +
-						   "VALUES (?, ?, ?, ?)";
+						   "(itemId, resortPropertyId, itemType, itemSize, archived) " +
+						   "VALUES (?, ?, ?, ?, ?)";
+
+			int archived = 0;
 
 			stmt = dbconn.prepareStatement(query);
 			stmt.setInt(1, newEquipmentId);
 			stmt.setInt(2, resortPropertyId);
 			stmt.setString(3, itemType);
 			stmt.setString(4, itemSize);
+			stmt.setInt(5, archived);
 
 			stmt.executeUpdate();
 		} catch (SQLException e) {

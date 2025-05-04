@@ -12,11 +12,13 @@ public class SkiPass extends ResortComponent{
 		try{
 			String query = "INSERT INTO SkiPass " +
                 "(skiPassId, numberOfUses, remainingUses, expirationDate) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?)";
+
+			int numberOfUses = 0;
 
 			stmt = dbconn.prepareStatement(query);
 			stmt.setInt(1, skiPassId);
-        	stmt.setInt(2, 0);
+        	stmt.setInt(2, numberOfUses);
         	stmt.setInt(3, remainingUses);
         	stmt.setDate(4, expirationDate);
 
@@ -97,6 +99,7 @@ public class SkiPass extends ResortComponent{
 		boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Ski Pass", xactDateTime, amount);
 		
 		if(!successXact) {
+			System.out.println("ERROR: Failed to create new transaction");
 			return false;
 		}
 
@@ -107,6 +110,7 @@ public class SkiPass extends ResortComponent{
 		boolean successSkiPass = createNewSkiPass(dbconn, newSkiPassId, remainingUses, expirationDate);
 
 		if(!successSkiPass){
+			System.out.println("ERROR: Failed to create new ski pass");
 			return false;
 		}
 
@@ -117,6 +121,7 @@ public class SkiPass extends ResortComponent{
 		boolean successSkiPasXact = createNewSkiPassXactDetails(dbconn, newSkiPassXactDetailsId, newTransactionId, newSkiPassId);
 
 		if(!successSkiPasXact) {
+			System.out.println("ERROR: Failed to create new SkiPassXact");
 			return false;
 		}
 
@@ -266,7 +271,7 @@ public class SkiPass extends ResortComponent{
 			answer = stmt.executeQuery();
 
 			// End if Ski Pass is not deletable
-			if(answer.next()) {
+			if(!answer.next()) {
 				System.out.println("Error: This Ski Pass cannot be deleted because it is either not expired or has remaining uses.");
 				return false;
 			}
@@ -308,9 +313,11 @@ public class SkiPass extends ResortComponent{
 			stmt = dbconn.prepareStatement(insertIntoArchiveQuery);
 			stmt.setInt(1, newSkiPassArchiveId);
 			stmt.setInt(2, memberId);
-			stmt.setInt(2, numUses);
+			stmt.setInt(3, numUses);
 			stmt.executeUpdate();
 			stmt.close();
+
+			System.out.println("Successfully archived SkiPass");
 
 			// Delete all entries with skiPassId from SkiPassXactDetails, RentalXactDetails, LiftUsage, SkiPass
 
@@ -401,9 +408,9 @@ public class SkiPass extends ResortComponent{
 			String rentalQuery = "SELECT rx.rentalXactDetailsId, t.transactionDateTime, ri.itemType, ri.itemSize, rx.returnStatus "+
 								 "FROM RentalXactDetails rx " +
 								 "JOIN Transactions t ON rx.transactionId = t.transactionId " +
-								 "JOIN ItemInRental iir ON rx.rentalXactDtailsId = iir.rentalXactDetailsId " +
+								 "JOIN ItemInRental iir ON rx.rentalXactDetailsId = iir.rentalXactDetailsId " +
 								 "JOIN RentalInventory ri ON iir.itemId = ri.itemID " +
-								 "WHERE rs.skiPassId = ? " +
+								 "WHERE rx.skiPassId = ? " +
 								 "ORDER BY t.transactionDateTime";
 
 			stmt = dbconn.prepareStatement(rentalQuery);

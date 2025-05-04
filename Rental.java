@@ -114,6 +114,7 @@ public class Rental extends ResortComponent{
 		// populate transaction content: resortPropId, memberId, transactionType, transactionDateTime, amount
 		boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Rental", dateTime, amount);
 		if(!successXact) {
+			System.out.println("ERROR: Couldn't create a new transaction.");
 			return false;
 		}
 
@@ -128,6 +129,7 @@ public class Rental extends ResortComponent{
 		// fill content for RentalXactDetails: TransactionId, skiPassId, returnStatus = 0, dateReturned = NULL
 		boolean successRentalXact = createNewRentalXactDetails(dbconn, newRentalXactDetailsId, newTransactionId, skiPassId);
 		if(!successRentalXact) {
+			System.out.println("ERROR: couldn't create a rentalXact inside Rental");
 			return false;
 		}
 
@@ -138,6 +140,7 @@ public class Rental extends ResortComponent{
 
 			boolean successItemInRental = createItemInRental(dbconn, itemId, newRentalXactDetailsId);
 			if(!successItemInRental) {
+				System.out.println("ERROR: Couldn't create an item in rental in Rental");
 				return false;
 			}
 		}

@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 public class LessonUI {
 
@@ -18,7 +17,7 @@ public class LessonUI {
             
             try {
                 int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume the newline
+                scanner.nextLine();  
                 
                 switch (choice) {
                     case 1:
@@ -38,7 +37,7 @@ public class LessonUI {
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
-                scanner.nextLine();  // Clear the invalid input
+                scanner.nextLine();  
             }
         }
     }
@@ -68,10 +67,19 @@ public class LessonUI {
         System.out.print("Enter package price: $");
         double amount = scanner.nextDouble();
         scanner.nextLine();
+
+        // Get transaction date/time from user
+        System.out.print("Enter transaction date and time (YYYY-MM-DD HH:MM:SS): ");
+        String xactDateTimeStr = scanner.nextLine();
+        Timestamp xactDateTime = null;
         
-        // Current timestamp for transaction time
-        Timestamp xactDateTime = new Timestamp(System.currentTimeMillis());
-        
+        try {
+            xactDateTime = Timestamp.valueOf(xactDateTimeStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid timestamp format. Please use YYYY-MM-DD HH:MM:SS format.");
+            return;
+        }
+
         try {
             boolean success = lesson.createLessonXact(dbconn, resortPropertyId, memberId, 
                               xactDateTime, amount, remSessions);
@@ -102,8 +110,17 @@ public class LessonUI {
         int lessonSessionId = scanner.nextInt();
         scanner.nextLine();
         
-        // Current date for usage date
-        java.sql.Date usedDate = java.sql.Date.valueOf(LocalDate.now());
+        // Get date from user for return (without time component)
+        System.out.print("Enter return date (YYYY-MM-DD): ");
+        String dateStr = scanner.nextLine();
+        java.sql.Date usedDate = null;
+        
+        try {
+            usedDate = java.sql.Date.valueOf(dateStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid date format. Please use YYYY-MM-DD format.");
+            return;
+        }
         
         try {
             boolean success = lesson.useLesson(dbconn, lessonXactDetailsId, lessonSessionId, usedDate);

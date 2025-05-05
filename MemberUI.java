@@ -1,18 +1,9 @@
 import java.sql.*;
 import java.util.Scanner;
 
-/**
- * MemberUI class - Handles all member-related user interface operations
- * Contains methods for displaying member management menu and processing user input
- * for member-related operations.
- */
 public class MemberUI {
     
-    /**
-     * Displays the member management menu and processes user choices
-     * 
-     * @param dbconn The active database connection
-     */
+    // this method shows the menu
     public static void showMenu(Connection dbconn) {
         Scanner scanner = new Scanner(System.in);
         boolean returnToMain = false;
@@ -56,16 +47,12 @@ public class MemberUI {
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
-                scanner.nextLine();  // Clear the invalid input
+                scanner.nextLine(); 
             }
         }
     }
 
-    /**
-     * Adds a new member to the database
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void addMember(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -113,11 +100,7 @@ public class MemberUI {
         }
     }
 
-    /**
-     * Updates a member's phone number
-     * 
-     * @param dbconn The active database connection
-     */
+   
     private static void updateMemberPhone(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -145,11 +128,7 @@ public class MemberUI {
         }
     }
 
-    /**
-     * Updates a member's email address
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void updateMemberEmail(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -177,11 +156,7 @@ public class MemberUI {
         }
     }
 
-    /**
-     * Updates a member's emergency contact information
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void updateEmergencyContact(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -211,11 +186,7 @@ public class MemberUI {
         }
     }
 
-    /**
-     * Deletes a member from the database
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void deleteMember(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);

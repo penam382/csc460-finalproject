@@ -1,16 +1,10 @@
 import java.sql.*;
 import java.util.Scanner;
 
-/**
- * SkiPassUI class - Handles all ski pass-related user interface operations
- */
+
 public class SkiPassUI {
     
-    /**
-     * Displays the ski pass management menu and processes user choices
-     * 
-     * @param dbconn The active database connection
-     */
+    // this method shows the menu
     public static void showMenu(Connection dbconn) {
         Scanner scanner = new Scanner(System.in);
         boolean returnToMain = false;
@@ -26,7 +20,7 @@ public class SkiPassUI {
             
             try {
                 int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume the newline
+                scanner.nextLine(); 
                 
                 switch (choice) {
                     case 1:
@@ -49,16 +43,12 @@ public class SkiPassUI {
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
-                scanner.nextLine();  // Clear the invalid input
+                scanner.nextLine();  
             }
         }
     }
 
-    /**
-     * Adds a new ski pass to the database
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void addSkiPass(Connection dbconn) throws SQLException {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
@@ -75,7 +65,7 @@ public class SkiPassUI {
         int resortPropertyId = scanner.nextInt();
         scanner.nextLine();  
         
-        // Choose pass type
+        // Choose pass type (i assumed prices here) 
         System.out.println("Choose ski pass type:");
         System.out.println("1. 1-day pass: $20");
         System.out.println("2. 2-day pass: $40");
@@ -146,11 +136,7 @@ public class SkiPassUI {
         }
     }
 
-    /**
-     * Records a lift usage for a ski pass
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void recordLiftUsage(Connection dbconn) {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
@@ -175,29 +161,24 @@ public class SkiPassUI {
         }
     }
 
-    /**
-     * Adjusts the remaining uses of a ski pass
-     * 
-     * @param dbconn The active database connection
-     */
+    
     private static void adjustRemainingUses(Connection dbconn) {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("\n--- Adjust Ski Pass Remaining Uses ---");
         
-        // Get ski pass ID
+        // ski pass ID
         System.out.print("Enter ski pass ID: ");
         int skiPassId = scanner.nextInt();
         scanner.nextLine();
         
-        // Get new remaining uses count
+        // Get new remaining uses 
         System.out.print("Enter the correct value: ");
         int newRemUses = scanner.nextInt();
         scanner.nextLine();
         
         try {
-            // Using the resetRemainingUses method since it's already implemented in your SkiPass class
             boolean success = skiPass.resetRemainingUses(dbconn, skiPassId, newRemUses);
             
             if (success) {
@@ -210,11 +191,7 @@ public class SkiPassUI {
         }
     }
 
-    /**
-     * Deletes an expired or depleted ski pass
-     * 
-     * @param dbconn The active database connection
-     */
+
     private static void deleteSkiPass(Connection dbconn) {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
@@ -231,9 +208,9 @@ public class SkiPassUI {
             boolean success = skiPass.deleteSkiPass(dbconn, skiPassId);
             
             if (success) {
-                System.out.println("Ski pass deleted and archived successfully!");
+                System.out.println("Ski pass deleted successfully!");
             } else {
-                System.out.println("Failed to delete ski pass. It may not meet deletion criteria.");
+                System.out.println("Failed to delete ski pass.");
             }
         } catch (Exception e) {
             System.out.println("Error deleting ski pass: " + e.getMessage());

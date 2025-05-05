@@ -18,8 +18,7 @@ public class EquipmentRentalUI {
             
             try {
                 int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume the newline
-                
+                scanner.nextLine(); 
                 switch (choice) {
                     case 1:
                         addRental(dbconn);
@@ -38,7 +37,7 @@ public class EquipmentRentalUI {
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
-                scanner.nextLine();  // Clear the invalid input
+                scanner.nextLine(); 
             }
         }
     }
@@ -68,9 +67,18 @@ public class EquipmentRentalUI {
         System.out.print("Enter rental amount: $");
         double amount = scanner.nextDouble();
         scanner.nextLine();
+
+        // Get date/time from user
+        System.out.print("Enter transaction date and time (YYYY-MM-DD HH:MM:SS): ");
+        String dateTimeStr = scanner.nextLine();
+        Timestamp dateTime = null;
         
-        // Current timestamp for rental time
-        Timestamp dateTime = new Timestamp(System.currentTimeMillis());
+        try {
+            dateTime = Timestamp.valueOf(dateTimeStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid timestamp format. Please use YYYY-MM-DD HH:MM:SS format.");
+            return;
+        }
         
         // Get number of items to rent
         System.out.print("Enter number of items to rent: ");
@@ -81,8 +89,9 @@ public class EquipmentRentalUI {
         ArrayList<Integer> itemIds = new ArrayList<>();
         
         // Get item IDs
+        System.out.print("Enter item ID #: ");
         for (int i = 0; i < numItems; i++) {
-            System.out.print("Enter item ID #" + (i+1) + ": ");
+            
             int itemId = scanner.nextInt();
             scanner.nextLine();
             itemIds.add(itemId);
@@ -112,20 +121,25 @@ public class EquipmentRentalUI {
         System.out.print("Enter rental transaction ID: ");
         int rentalXactDetailsId = scanner.nextInt();
         scanner.nextLine();
-        
-        // Get current date for return date
-        java.sql.Date dateReturned = java.sql.Date.valueOf(LocalDate.now());
+    
+        // Get date from user for return (without time component)
+        System.out.print("Enter return date (YYYY-MM-DD): ");
+        String dateStr = scanner.nextLine();
+        java.sql.Date returnDate = null;
         
         try {
-            boolean success = rental.setRentalXactReturned(dbconn, rentalXactDetailsId, dateReturned);
+            returnDate = java.sql.Date.valueOf(dateStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid date format. Please use YYYY-MM-DD format.");
+            return;
+        }
+    
+        boolean success = rental.setRentalXactReturned(dbconn, rentalXactDetailsId, returnDate);
             
-            if (success) {
-                System.out.println("Rental marked as returned successfully!");
-            } else {
-                System.out.println("Failed to update rental status. Rental ID may not exist.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error updating rental: " + e.getMessage());
+        if (success) {
+            System.out.println("Rental marked as returned successfully!");
+        } else {
+            System.out.println("Failed to update rental status. Rental ID may not exist.");
         }
     }
 

@@ -18,7 +18,7 @@ public class EquipmentInventoryUI {
             
             try {
                 int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume the newline
+                scanner.nextLine(); 
                 
                 switch (choice) {
                     case 1:
@@ -41,7 +41,7 @@ public class EquipmentInventoryUI {
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
-                scanner.nextLine();  // Clear the invalid input
+                scanner.nextLine(); 
             }
         }
     }
@@ -104,12 +104,12 @@ public class EquipmentInventoryUI {
         
         System.out.println("\n--- Update Equipment Size ---");
         
-        // Get item ID
+        // item ID
         System.out.print("Enter equipment ID: ");
         int itemId = scanner.nextInt();
         scanner.nextLine();
         
-        // Get new size
+        // new size
         System.out.print("Enter new equipment size: ");
         String newSize = scanner.nextLine();
         
@@ -137,9 +137,9 @@ public class EquipmentInventoryUI {
         boolean success = equipment.deleteEquipment(dbconn, itemId);
         
         if (success) {
-            System.out.println("Equipment archived successfully!");
+            System.out.println("Equipment deleted successfully!");
         } else {
-            System.out.println("Failed to archive equipment.");
+            System.out.println("Failed to delete equipment.");
         }
     }
 }

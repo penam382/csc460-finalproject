@@ -1,3 +1,20 @@
+
+/*
+ * Class MemberUI:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class implements the user interface for Member Management, providing
+ *  menu options and input handling for all member-related actions.
+ * 
+ *  Public Methods:
+ *      static void showMenu(Connection dbconn)
+ *
+ *  Private Methods:
+ *      static void addMember(Connection dbconn)
+ *      static void updateMemberPhone(Connection dbconn)
+ *      static void updateMemberEmail(Connection dbconn)
+ *      static void updateEmergencyContact(Connection dbconn)
+ *      static void deleteMember(Connection dbconn)
+ */
 import java.sql.*;
 import java.util.Scanner;
 
@@ -21,7 +38,7 @@ public class MemberUI {
             
             try {
                 int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume the newline
+                scanner.nextLine(); 
                 
                 switch (choice) {
                     case 1:
@@ -52,7 +69,10 @@ public class MemberUI {
         }
     }
 
-    
+    /**
+     * this method holds the UI for adding a member
+     * @param dbconn - The connection to the database
+     */
     private static void addMember(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -100,7 +120,10 @@ public class MemberUI {
         }
     }
 
-   
+   /**
+    * this method allows the user to update the phone number
+    * @param dbconn
+    */
     private static void updateMemberPhone(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -128,7 +151,10 @@ public class MemberUI {
         }
     }
 
-    
+    /**
+    * this method allows the user to update the email
+    * @param dbconn
+    */
     private static void updateMemberEmail(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -156,7 +182,10 @@ public class MemberUI {
         }
     }
 
-    
+    /**
+    * this method allows the user to update the emergency contact
+    * @param dbconn
+    */
     private static void updateEmergencyContact(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);
@@ -186,7 +215,10 @@ public class MemberUI {
         }
     }
 
-    
+    /**
+    * this method allows the user to delete a member account
+    * @param dbconn
+    */
     private static void deleteMember(Connection dbconn) {
         Member member = new Member();
         Scanner scanner = new Scanner(System.in);

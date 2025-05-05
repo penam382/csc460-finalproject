@@ -1,4 +1,19 @@
-import java.sql.*;
+/*
+ * Class LessonUI:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class implements the UI for lesson management,
+ *  allowing to create lesson packages, track usage, and manage records.
+ * 
+ *  Public Methods:
+ *      static void showMenu(Connection dbconn)
+ *
+ *  Private Methods:
+ *      static void addLessonPackage(Connection dbconn)
+ *      static void recordLessonUsage(Connection dbconn)
+ *      static void deleteLessonPackage(Connection dbconn)
+ */
+
+ import java.sql.*;
 import java.util.Scanner;
 
 public class LessonUI {

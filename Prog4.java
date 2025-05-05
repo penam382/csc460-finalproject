@@ -26,8 +26,6 @@ import java.util.Scanner;
  *      javac Prog4.java
  *      java Prog4
  *                      "
- *      My username and password are hardcoded within, so no need to input anything to start it.
- *      My tables should be all accessable with the 'pena8.MVRDxxxx'
  *  
  */
 
@@ -62,7 +60,8 @@ public class Prog4 {
             dbconn = DriverManager.getConnection(oracleURL, username, password);
             System.out.println("Connected to Oracle database.");
             System.out.println("Welcome to our Ski Resort!");
-
+            
+            // user options
             System.out.println("Please select an option (1-7):");
             System.out.println("1. Member Management");
             System.out.println("2. Ski Pass Management");

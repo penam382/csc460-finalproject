@@ -86,3 +86,10 @@ Seth Notes 5/3
 I have tested and debugged: Member, SkiPass, Equipment, Rental, and Lesson
 All of them work as expected (some edge cases aren't tested)
 We should be good to create the UI now, using examples from the testing file (functionalityTest.java)
+
+Marco Notes 5/4:
+- implenation done not fully tested.
+- make the menu print again after user goes back to it
+
+- the query i came up with was having a member profile. seeing what they like to use (snowboard or ski) their size, and the amount of money spent
+- (for me) - dont forget to change queries so everything is based off memberid (line 165 EquipmentInventoryUI)

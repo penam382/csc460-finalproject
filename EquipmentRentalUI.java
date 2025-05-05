@@ -1,3 +1,18 @@
+/*
+ * Class EquipmentRentalUI:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class provides the UI for equipment rental management,
+ *  enabling to create, update, and delete rental transactions.
+ * 
+ *  Public Methods:
+ *      static void showMenu(Connection dbconn)
+ *
+ *  Private Methods:
+ *      static void addRental(Connection dbconn)
+ *      static void updateRental(Connection dbconn)
+ *      static void deleteRental(Connection dbconn)
+ */
+
 import java.sql.*;
 import java.util.*;
 import java.time.LocalDate;
@@ -42,6 +57,10 @@ public class EquipmentRentalUI {
         }
     }
 
+    /**
+     * this method allows the user to add a rental
+     * @param dbconn - The connection to the database
+     */
     private static void addRental(Connection dbconn) {
         Rental rental = new Rental();
         Scanner scanner = new Scanner(System.in);
@@ -111,6 +130,10 @@ public class EquipmentRentalUI {
         }
     }
 
+    /**
+     * this method allows the update a rental
+     * @param dbconn - The connection to the database
+     */
     private static void updateRental(Connection dbconn) {
         Rental rental = new Rental();
         Scanner scanner = new Scanner(System.in);
@@ -143,6 +166,10 @@ public class EquipmentRentalUI {
         }
     }
 
+    /**
+     * this method allows the user to delete a rental
+     * @param dbconn - The connection to the database
+     */
     private static void deleteRental(Connection dbconn) {
         Rental rental = new Rental();
         Scanner scanner = new Scanner(System.in);

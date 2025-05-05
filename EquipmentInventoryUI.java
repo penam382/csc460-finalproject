@@ -1,3 +1,19 @@
+/*
+ * Class EquipmentInventoryUI:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class implements the UI for managing equipment inventory,
+ *  allowing to add, update, and delete equipment in the system.
+ * 
+ *  Public Methods:
+ *      static void showMenu(Connection dbconn)
+ *
+ *  Private Methods:
+ *      static void addEquipment(Connection dbconn)
+ *      static void updateEquipmentType(Connection dbconn)
+ *      static void updateEquipmentSize(Connection dbconn)
+ *      static void deleteEquipment(Connection dbconn)
+ */
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -46,6 +62,10 @@ public class EquipmentInventoryUI {
         }
     }
 
+    /**
+     * this method allows the user to add equipment
+     * @param dbconn - The connection to the database
+     */
     private static void addEquipment(Connection dbconn) {
         Equipment equipment = new Equipment();
         Scanner scanner = new Scanner(System.in);
@@ -74,6 +94,10 @@ public class EquipmentInventoryUI {
         }
     }
 
+    /**
+     * this method allows the user to update equipment type
+     * @param dbconn - The connection to the database
+     */
     private static void updateEquipmentType(Connection dbconn) {
         Equipment equipment = new Equipment();
         Scanner scanner = new Scanner(System.in);
@@ -98,6 +122,10 @@ public class EquipmentInventoryUI {
         }
     }
 
+    /**
+     * this method allows the user to update equipment size
+     * @param dbconn - The connection to the database
+     */
     private static void updateEquipmentSize(Connection dbconn) {
         Equipment equipment = new Equipment();
         Scanner scanner = new Scanner(System.in);
@@ -122,6 +150,10 @@ public class EquipmentInventoryUI {
         }
     }
 
+    /**
+     * this method allows the user to adjust delete equipment
+     * @param dbconn - The connection to the database
+     */
     private static void deleteEquipment(Connection dbconn) {
         Equipment equipment = new Equipment();
         Scanner scanner = new Scanner(System.in);
@@ -129,7 +161,9 @@ public class EquipmentInventoryUI {
         System.out.println("\n--- Delete Equipment ---");
         System.out.println("Note: Equipment cannot be deleted if currently rented out");
         
-        // Get item ID
+        // --------
+        // -------- change this part to member id then find the equipment ID
+        // --------
         System.out.print("Enter equipment ID: ");
         int itemId = scanner.nextInt();
         scanner.nextLine();

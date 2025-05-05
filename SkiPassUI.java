@@ -1,6 +1,21 @@
+/*
+ * Class SkiPassUI:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class provides the user interface for managing ski passes,
+ *  including adding new passes, recording lift usage, and adjusting pass details.
+ * 
+ *  Public Methods:
+ *      static void showMenu(Connection dbconn)
+ *
+ *  Private Methods:
+ *      static void addSkiPass(Connection dbconn)
+ *      static void recordLiftUsage(Connection dbconn)
+ *      static void adjustRemainingUses(Connection dbconn)
+ *      static void deleteSkiPass(Connection dbconn)
+ */
+
 import java.sql.*;
 import java.util.Scanner;
-
 
 public class SkiPassUI {
     
@@ -48,7 +63,11 @@ public class SkiPassUI {
         }
     }
 
-    
+    /**
+     * this method adds a skipass from user inputs
+     * @param dbconn - The connection to the database
+     * @throws SQLException
+     */
     private static void addSkiPass(Connection dbconn) throws SQLException {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
@@ -136,7 +155,10 @@ public class SkiPassUI {
         }
     }
 
-    
+    /**
+     * this method allows the user to record a lift usage
+     * @param dbconn - The connection to the database
+     */
     private static void recordLiftUsage(Connection dbconn) {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
@@ -161,7 +183,10 @@ public class SkiPassUI {
         }
     }
 
-    
+    /**
+     * this method allows the user to adjust remaining use if a member reports an issue
+     * @param dbconn - The connection to the database
+     */
     private static void adjustRemainingUses(Connection dbconn) {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);
@@ -191,7 +216,10 @@ public class SkiPassUI {
         }
     }
 
-
+    /**
+     * this method allows the user to delete a skipass
+     * @param dbconn - The connection to the database
+     */
     private static void deleteSkiPass(Connection dbconn) {
         SkiPass skiPass = new SkiPass();
         Scanner scanner = new Scanner(System.in);

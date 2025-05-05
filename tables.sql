@@ -25,7 +25,6 @@ CREATE TABLE Employee (
 CREATE TABLE EmployeeTimesheet (
     employeeTimesheetId NUMBER(*, 0),
     employeeId NUMBER(*, 0) NOT NULL,
-    employeeRoleId NUMBER(*, 0) NOT NULL,
     monthYear DATE NOT NULL,
     hoursWorked NUMBER(6,2) NOT NULL,
     PRIMARY KEY (employeeTimesheetId),

@@ -82,51 +82,51 @@ public class SkiPass extends ResortComponent{
 	}
 
 	public boolean newSkiPass(Connection dbconn, int memberId, int resortPropertyId, Timestamp xactDateTime,
-	double amount, int remainingUses, Date expirationDate) {
-		// createNewXactId
-		int newTransactionId = createNewId(dbconn, "Transactions", "transactionId");
+		double amount, int remainingUses, Date expirationDate) {
+			// createNewXactId
+			int newTransactionId = createNewId(dbconn, "Transactions", "transactionId");
 
-		// Validate memberId, resortPropertyId
-		if(!existsId(dbconn, memberId, "MemberAccount", "memberId")) {
-			return false;
+			// Validate memberId, resortPropertyId
+			if(!existsId(dbconn, memberId, "MemberAccount", "memberId")) {
+				return false;
+			}
+			
+			if(!existsId(dbconn, resortPropertyId, "ResortProperty", "resortPropertyId")){
+				return false;
+			}
+
+			// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
+			boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Ski Pass", xactDateTime, amount);
+			
+			if(!successXact) {
+				System.out.println("ERROR: Failed to create new transaction");
+				return false;
+			}
+
+			// createNewSkiPassId
+			int newSkiPassId = createNewId(dbconn, "SkiPass", "skiPassId");
+
+			// create new SkiPass, content: skiPassId, numUses = 0, remainingUses, expirDate
+			boolean successSkiPass = createNewSkiPass(dbconn, newSkiPassId, remainingUses, expirationDate);
+
+			if(!successSkiPass){
+				System.out.println("ERROR: Failed to create new ski pass");
+				return false;
+			}
+
+			// create NewSkiPassXactDetailsId
+			int newSkiPassXactDetailsId = createNewId(dbconn, "SkiPassXactDetails", "skiPassXactDetailsId");
+
+			// create new skiPassXactDetails, content: id, transactionId, skiPassId
+			boolean successSkiPasXact = createNewSkiPassXactDetails(dbconn, newSkiPassXactDetailsId, newTransactionId, newSkiPassId);
+
+			if(!successSkiPasXact) {
+				System.out.println("ERROR: Failed to create new SkiPassXact");
+				return false;
+			}
+
+			return true;
 		}
-		
-		if(!existsId(dbconn, resortPropertyId, "ResortProperty", "resortPropertyId")){
-			return false;
-		}
-
-		// create new Transaction, content: xactId, resortPropertyId, memberId, type, dateTime, amount
-		boolean successXact = createNewTransaction(dbconn, newTransactionId, resortPropertyId, memberId, "Ski Pass", xactDateTime, amount);
-		
-		if(!successXact) {
-			System.out.println("ERROR: Failed to create new transaction");
-			return false;
-		}
-
-		// createNewSkiPassId
-		int newSkiPassId = createNewId(dbconn, "SkiPass", "skiPassId");
-
-		// create new SkiPass, content: skiPassId, numUses = 0, remainingUses, expirDate
-		boolean successSkiPass = createNewSkiPass(dbconn, newSkiPassId, remainingUses, expirationDate);
-
-		if(!successSkiPass){
-			System.out.println("ERROR: Failed to create new ski pass");
-			return false;
-		}
-
-		// create NewSkiPassXactDetailsId
-		int newSkiPassXactDetailsId = createNewId(dbconn, "SkiPassXactDetails", "skiPassXactDetailsId");
-
-		// create new skiPassXactDetails, content: id, transactionId, skiPassId
-		boolean successSkiPasXact = createNewSkiPassXactDetails(dbconn, newSkiPassXactDetailsId, newTransactionId, newSkiPassId);
-
-		if(!successSkiPasXact) {
-			System.out.println("ERROR: Failed to create new SkiPassXact");
-			return false;
-		}
-
-		return true;
-	}
 
 	public boolean skiPassUsed(Connection dbconn, int skiPassId) {
 		// deduct 1 from ski pass remaining uses, incrememnt number of uses

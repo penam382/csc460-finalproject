@@ -30,13 +30,22 @@ DONE - Create Test Suite to Test & Fix Existing code
 	DONE - Try all functionalities
 	DONE - Try all queries
 - Complete design.pdf
-	- E-R Diagram (final)
-	- Logical DB design
-	- Normalization Analysis
-	- Query Descriptions
+	DONE - E-R Diagram (final)
+	DONE - Logical DB design
+	DONE - Normalization Analysis
+	DONE - Query Descriptions
 - Complete readme.txt
 	- Compilation & Execution instructions
-	- Workload Distribution
+	DONE - Workload Distribution
+- Clean + Retest
+	- Delete all tables
+	- Remake tables
+	- make sample insertions
+	- run test script
+	- delete all tables
+	- remake tables
+	- make sample insertions
+	- test UI
 - Present to TAs
 
 

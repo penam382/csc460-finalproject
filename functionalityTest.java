@@ -3,6 +3,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+/*
+ * Class functionalityTest:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class performs an extensive set of test cases to test functionality throughout
+ *  the program.
+ * 
+ */
 public class functionalityTest {
 
 	private static Connection dbconn = null;

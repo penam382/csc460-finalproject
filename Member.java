@@ -1,6 +1,24 @@
 import java.time.LocalDate;
 import java.sql.*;
 
+/*
+ * Class Member:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class contains functions that allow required system Adds, Updates, and Deletes
+ *  with regard to the members at the Ski Resort.
+ * 
+ *  Inst Methods:
+ * 		createNewMemberId(Connection dbconn)
+ * 		createNewEmergContId(Connection dbconn)
+ * 		insertMember(Connection dbconn, String name, String phoneNumber, String email, Date dateOfBirth, String emergContactName, String emergContactPhone)
+ * 		createEmergencyContact(Connection dbconn, int emergContactId, String contactName, String contactPhone)
+ *      createMemberAccount(Connection dbconn, int memberId, String name, String phoneNumber, String email, Date dateOfBirth, int emergencyContactId)
+ *      deleteMember(Connection dbconn, int memberId)
+ *      updatePhoneNumber(Connection dbconn, int memberId, String newPhoneNumber)
+ *      updateEmail(Connection dbconn, int memberId, String newEmail)
+ *      updateEmergencyContact(Connection dbconn, int memberId, String newContactName, String newContactPhoneNum)
+ *      memberQuery(Connection dbconn, int memberId)
+ */
 public class Member {
     private int memberId; // made this an instance variable for easier usage throughout class
 
@@ -12,6 +30,17 @@ public class Member {
         this.memberId = memberId;
     }
 
+    /*
+	 * createNewMemberId(Connection dbconn)
+	 * 
+	 * Purpose: This class creates a new ID for member insertion
+	 * 
+	 * Returns: Created Id
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
     public int createNewMemberId(Connection dbconn) {
         Statement stmt = null;
         ResultSet answer = null;
@@ -53,6 +82,17 @@ public class Member {
         return newId;
     }
 
+    /*
+	 * createNewEmergContId(Connection dbconn)
+	 * 
+	 * Purpose: This class creates a new ID for emergency contact insertion
+	 * 
+	 * Returns: Created Id
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
     public int createNewEmergContId(Connection dbconn) {
         Statement stmt = null;
         ResultSet answer = null;
@@ -94,7 +134,23 @@ public class Member {
         return newId;
     }
 
-    // Method to insert member into database
+    /*
+	 * insertMember(Connection dbconn, String name, String phoneNumber, String email, Date dateOfBirth, String emergContactName, String emergContactPhone)
+	 * 
+	 * Purpose: A wrapper that calls functions to create a new member account and corresponding emergency contact.
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  name: The name of the added member
+     *  phoneNumber: The phone number of the added member
+     *  email: The email of the added member
+     *  dateOfBirth: The DOB of the added member
+     *  emergContactName: The name of the emergency contact for the member
+     *  emrgContactPhone: The phone number for this emergency contact.
+	 * 
+	 */
     public boolean insertMember(Connection dbconn, String name, String phoneNumber, 
                                String email, Date dateOfBirth, 
                                String emergContactName, String emergContactPhone) throws SQLException {
@@ -127,6 +183,20 @@ public class Member {
         return true;
     }
     
+    /*
+	 * createEmergencyContact(Connection dbconn, int emergContactId, String contactName, String contactPhone)
+	 * 
+	 * Purpose: This function creates a new emergency contact
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  emergContactId: The unique id for the new emergency contact
+     *  contactName: The name of the emergency contact
+     *  contactPhone: The phone number of the emergency contact.
+	 * 
+	 */
     private boolean createEmergencyContact(Connection dbconn, int emergContactId, String contactName, String contactPhone) {
         PreparedStatement stmt = null;
 
@@ -166,7 +236,23 @@ public class Member {
         }
     }
     
-
+    /*
+	 * createMemberAccount(Connection dbconn, int memberId, String name, String phoneNumber, String email, Date dateOfBirth, int emergencyContactId)
+	 * 
+	 * Purpose: This function creates a new member account
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  memberId: A unique ID for this member's account record
+     *  name: The name of the new member
+     *  phoneNumber: The phone number of the new member
+     *  email: The email of the new member
+     *  dateOfBirth: The DOB of the new member
+     *  emergencyContactId: The ID of the emergency contact record for this new member
+	 * 
+	 */
     private boolean createMemberAccount(Connection dbconn, int memberId, String name, String phoneNumber, 
                                      String email, Date dateOfBirth, int emergencyContactId) {
         PreparedStatement stmt = null;
@@ -210,7 +296,18 @@ public class Member {
         }
     }
 
-    
+    /*
+	 * deleteMember(Connection dbconn, int memberId)
+	 * 
+	 * Purpose: This function deletes a member account
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  memberId: A unique ID for this member's account record
+	 * 
+	 */
     public boolean deleteMember(Connection dbconn, int memberId) throws SQLException {
         // Initialize classes to access their methods
         SkiPass skiPass = new SkiPass();
@@ -482,7 +579,19 @@ public class Member {
     }
 
     
-
+     /*
+	 * updatePhoneNumber(Connection dbconn, int memberId, String newPhoneNumber)
+	 * 
+	 * Purpose: This function updates the phone number of a member
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  memberId: A unique ID for this member's account record
+     *  newPhoneNumber: The phone number for the member account to be updated to
+	 * 
+	 */
     public boolean updatePhoneNumber(Connection dbconn, int memberId, String newPhoneNumber) {
         PreparedStatement stmt = null;
         boolean updated = false;
@@ -521,6 +630,19 @@ public class Member {
         return updated;
     }
 
+     /*
+	 * updateEmail(Connection dbconn, int memberId, String newEmail)
+	 * 
+	 * Purpose: This function updates the email of a member
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  memberId: A unique ID for this member's account record
+     *  newEmail: The email for the member account to be updated to
+	 * 
+	 */
     public boolean updateEmail(Connection dbconn, int memberId, String newEmail) {
         PreparedStatement stmt = null;
         boolean updated = false;
@@ -559,6 +681,20 @@ public class Member {
         return updated;
     }
 
+    /*
+	 * updateEmergencyContact(Connection dbconn, int memberId, String newContactName, String newContactPhoneNum)
+	 * 
+	 * Purpose: This function updates a member's emergency contact information
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+     *  memberId: A unique ID for this member's account record
+     *  newContactName: The new name for the member's emerg. contact
+     *  newContactPhoneNum: The new phone number for the member's emerg. contact
+	 * 
+	 */
     public boolean updateEmergencyContact(Connection dbconn, int memberId, String newContactName, String newContactPhoneNum) {
         PreparedStatement stmt = null;
         ResultSet answer = null;

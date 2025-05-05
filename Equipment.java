@@ -1,10 +1,36 @@
 import java.sql.*;
 
+/*
+ * Class Equipment:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class contains functions that allow required system Adds, Updates, and Deletes
+ *  with regard to the equipment inventory at the Ski Resort.
+ * 
+ *  Inst Methods:
+ * 		addNewEquipment(Connection dbconn, int resortPropertyId, String itemType, String itemSize)
+ * 		changeEquipmentType(Connection dbconn, int itemId, String newType)
+ * 		changeEquipmentSize(Connection dbconn, int itemId, String newSize)
+ * 		deleteEquipment(Connection dbconn, int itemId)
+ */
 public class Equipment extends ResortComponent {
 	public Equipment() {
 
 	}
 
+	/*
+	 * addNewEquipment(Connection dbconn, int resortPropertyId, String itemType, String itemSize)
+	 * 
+	 * Purpose: This class performs an insertion of a new equipment item to the resort's equipment inventory
+	 * 
+	 * Returns: True if insertion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  resortPropertyId: The Id of the property this equipment is being assinged to
+	 *  itemType: The type of item being inserted
+	 *  itemSize: The size of the item being inserted
+	 * 
+	 */
 	public boolean addNewEquipment(Connection dbconn, int resortPropertyId, String itemType, String itemSize) {
 		// Create unique equipment ID
 		int newEquipmentId = createNewId(dbconn, "RentalInventory", "itemId");
@@ -56,6 +82,18 @@ public class Equipment extends ResortComponent {
 		return true;
 	}
 
+	/*
+	 * changeEquipmentType(Connection dbconn, int itemId, String newType)
+	 * 
+	 * Purpose: This class changes the type of a piece of equipment
+	 * 
+	 * Returns: True if update successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  itemId: The ID of the item in the database to change its type
+	 *  newType: The equipment type to change an item to
+	 */
 	public boolean changeEquipmentType(Connection dbconn, int itemId, String newType) {
 		PreparedStatement stmt = null;
 		ResultSet answer = null;
@@ -137,6 +175,18 @@ public class Equipment extends ResortComponent {
 		return updated;
 	}
 
+	/*
+	 * changeEquipmentSize(Connection dbconn, int itemId, String newSize)
+	 * 
+	 * Purpose: This class changes the size of a piece of equipment
+	 * 
+	 * Returns: True if update successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  itemId: The ID of the item in the database to change its size
+	 *  newSize: The equipment size to change an item to
+	 */
 	public boolean changeEquipmentSize(Connection dbconn, int itemId, String newSize) {
 		PreparedStatement stmt = null;
 		ResultSet answer = null;
@@ -218,6 +268,17 @@ public class Equipment extends ResortComponent {
 		return updated;
 	}
 
+	/*
+	 * deleteEquipment(Connection dbconn, int itemId)
+	 * 
+	 * Purpose: This function 'deletes' a piece of equipment by marking it as archived
+	 * 
+	 * Returns: True if deletion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  itemId: The ID of the item to delete
+	 */
 	public boolean deleteEquipment(Connection dbconn, int itemId) {
 		PreparedStatement stmt = null;
 		ResultSet answer = null;

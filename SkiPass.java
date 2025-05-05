@@ -1,11 +1,40 @@
 import java.sql.*;
 
+/*
+ * Class Equipment:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class contains functions that allow required system Adds, Updates, and Deletes
+ *  with regard to ski passes at the Ski Resort.
+ * 
+ *  Inst Methods:
+ * 		createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate)
+ * 		newSkiPass(Connection dbconn, int memberId, int resortPropertyId, Timestamp xactDateTime, double amount, int remainingUses, Date expirationDate)
+ * 		skiPassUsed(Connection dbconn, int skiPassId)
+ * 		resetRemainingUses(Connection dbconn, int skiPassId, int newRemUses)
+ * 		hasRemainingUses(Connection dbconn, int skiPassId)
+ * 		deleteSkiPass(Connection dbconn, int skiPassId)
+ * 		skiPassQuery(Connection dbconn, int skiPassId)
+ */
 public class SkiPass extends ResortComponent{
 
 	public SkiPass() {
 
 	}
 
+	/*
+	 * createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate)
+	 * 
+	 * Purpose: This function creates a new ski pass
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassId: The unique ID for the new ski pass
+	 *  remainingUses: The number of remaining uses (or initial purchase uses) for the ski pass
+	 *  expirationDate: The date when the ski pass expires
+	 * 
+	 */
 	private boolean createNewSkiPass(Connection dbconn, int skiPassId, int remainingUses, Date expirationDate) {
 		PreparedStatement stmt = null;
 
@@ -45,6 +74,20 @@ public class SkiPass extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * createNewSkiPassXactDetails(Connection dbconn, int skiPassXactDetailsId, int transactionId, int skiPassId)
+	 * 
+	 * Purpose: This function creates a new set of ski pass transaction details for a ski pass purchase
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassXactDetailsId: The unique ID for this ski pass transactions details
+	 *  transactionId: The id of the overarching transaction for the ski pass purchase
+	 *  skiPassId: The id of the ski pass purchase
+	 * 
+	 */
 	private boolean createNewSkiPassXactDetails(Connection dbconn, int skiPassXactDetailsId, int transactionId, int skiPassId) {
 		PreparedStatement stmt = null;
 
@@ -81,6 +124,24 @@ public class SkiPass extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * newSkiPass(Connection dbconn, int memberId, int resortPropertyId, Timestamp xactDateTime, double amount, int remainingUses, Date expirationDate)
+	 * 
+	 * Purpose: This function is the wrapper to perform creation of a new ski pass, including creating a new transaction and ski pass transaction details
+	 * and the ski pass itself.
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  memberId: The id of the member purchasing a ski pass
+	 *  resortPropertyId: The id of the resort property that the ski pass was purchased at
+	 *  xactDateTime: The time of the ski pass purchase
+	 *  amount: The cost of the ski pass
+	 *  remainingUses: The amount of uses for the purchased ski pass
+	 *  expirationDate: the expiration date for the ski pass
+	 * 
+	 */
 	public boolean newSkiPass(Connection dbconn, int memberId, int resortPropertyId, Timestamp xactDateTime,
 	double amount, int remainingUses, Date expirationDate) {
 		// createNewXactId
@@ -128,6 +189,19 @@ public class SkiPass extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * skiPassUsed(Connection dbconn, int skiPassId)
+	 * 
+	 * Purpose: This function acts when the ski pass is used, checking that the pass is usable, increasing number of uses, decreasing
+	 * uses remaining.
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassId: The id of the ski pass being used.
+	 * 
+	 */
 	public boolean skiPassUsed(Connection dbconn, int skiPassId) {
 		// deduct 1 from ski pass remaining uses, incrememnt number of uses
 		PreparedStatement stmt = null;
@@ -171,6 +245,19 @@ public class SkiPass extends ResortComponent{
 		return updated;
 	}
 
+	/*
+	 * resetRemainingUses(Connection dbconn, int skiPassId, int newRemUses)
+	 * 
+	 * Purpose: This function allows resetting remaining uses for a ski pass to a specified number
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassId: The id of the ski pass being reset
+	 *  newRemUses: The new number of remaining uses for the ski pass
+	 * 
+	 */
 	public boolean resetRemainingUses(Connection dbconn, int skiPassId, int newRemUses) {
 		PreparedStatement stmt = null;
 		boolean updated = false;
@@ -213,6 +300,18 @@ public class SkiPass extends ResortComponent{
 		return updated;
 	}
 
+	/*
+	 * hasRemainingUses(Connection dbconn, int skiPassId) 
+	 * 
+	 * Purpose: This function checks if a ski pass has remaining uses left
+	 * 
+	 * Returns: True if remaining uses exist, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassId: The id of the ski pass being checked
+	 * 
+	 */
 	public boolean hasRemainingUses(Connection dbconn, int skiPassId) {
 		PreparedStatement stmt = null;
 		ResultSet answer = null;
@@ -259,6 +358,18 @@ public class SkiPass extends ResortComponent{
 		return hasUses;
 	}
 
+	/*
+	 * deleteSkiPass(Connection dbconn, int skiPassId)
+	 * 
+	 * Purpose: This function deletes a ski pass if it has no remaining uses and is expired.
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassId: The id of the ski pass being deleted
+	 * 
+	 */
 	public boolean deleteSkiPass(Connection dbconn, int skiPassId) {
 		PreparedStatement stmt = null;
 		ResultSet answer = null;
@@ -373,6 +484,19 @@ public class SkiPass extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * skiPassQuery(Connection dbconn, int skiPassId)
+	 * 
+	 * Purpose: This function performs the ski pass query, for a given ski pass, listing all lift rides and
+	 * equipment rentals associated with it, along with timestamps and return statuses.
+	 * 
+	 * Returns: True if successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  skiPassId: The id of the ski pass being queried on
+	 * 
+	 */
 	public boolean skiPassQuery(Connection dbconn, int skiPassId){
 		// For a given ski pass, list all lift rides and equipment rentals associated with it, along with
 		//	timestamps and return status

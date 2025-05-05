@@ -2,12 +2,37 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-
+/*
+ * Class Rental:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class contains functions that allow required system Adds, Updates, and Deletes
+ *  with regard to the equipment rentals at the Ski Resort.
+ * 
+ *  Inst Methods:
+ * 		createItemInRental(Connection dbconn, int itemId, int RentalXactDetailsId)
+ * 		createNewRentalXactDetails(Connection dbconn, int rentalXactDetailsId, int transactionId, int skiPassId)
+ * 		createRentalXact(Connection dbconn, int resortPropertyId, int memberId, String transactionType, Timestamp dateTime, double amount, int skiPassId, ArrayList<Integer> itemIds)
+ * 		setRentalXactReturned(Connection dbconn, int rentalXactDetailsId, Date dateReturned)
+ * 		deleteRentalXact(Connection dbconn, int rentalXactDetailsId)
+ */
 public class Rental extends ResortComponent{
 	public Rental() {
 
 	}
 
+	/*
+	 * createItemInRental(Connection dbconn, int itemId, int RentalXactDetailsId)
+	 * 
+	 * Purpose: This function creates a new item in rental, which connects a rental transaction to item(s) in the rental.
+	 * 
+	 * Returns: True if insertion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  itemId: The id of the item being rented
+	 * 	RentalXactDetailsId: The ID of the rental transaction this item in rental is assoc. with
+	 * 
+	 */
 	private boolean createItemInRental(Connection dbconn, int itemId, int RentalXactDetailsId){
 		// Validate itemId, rentalXactDetailsId
 		if(!existsId(dbconn, itemId, "RentalInventory", "itemId")){
@@ -58,6 +83,20 @@ public class Rental extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * createNewRentalXactDetails(Connection dbconn, int rentalXactDetailsId, int transactionId, int skiPassId)
+	 * 
+	 * Purpose: This function creates a new set of details for a rental transaction
+	 * 
+	 * Returns: True if insertion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  rentalXactDetailsId: The unique Id for this set of details for the transactions
+	 *  transactionId: the id for the overarching transaction for this rental
+	 *  skiPassId: The ski pass id associated with this rental.
+	 * 
+	 */
 	private boolean createNewRentalXactDetails(Connection dbconn, int rentalXactDetailsId, int transactionId, int skiPassId) {
 		PreparedStatement stmt = null;
 
@@ -97,6 +136,25 @@ public class Rental extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * createRentalXact(Connection dbconn, int resortPropertyId, int memberId, String transactionType, Timestamp dateTime, double amount, int skiPassId, ArrayList<Integer> itemIds)
+	 * 
+	 * Purpose: This function is a wrapper around a rental transaction, creating a new overall transaction, new rental transaction details, and associating
+	 * the transaction with the items being rented.
+	 * 
+	 * Returns: True if insertion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  resortPropertyId: The id of the property the rental is associated with
+	 *  memberId: The member renting item(s)
+	 *  transactionType: The type of transaction ("Rental")
+	 *  dateTime: the time of the rental transaction
+	 *  amount: The cost of the rental
+	 *  skiPassId: The id of the ski pass associated with the rental
+	 *  itemIds: The list of ids for items in the rental transaction
+	 * 
+	 */
 	public boolean createRentalXact(Connection dbconn, int resortPropertyId, int memberId, String transactionType,
 	Timestamp dateTime, double amount, int skiPassId, ArrayList<Integer> itemIds) {
 		// Create Transaction Id
@@ -148,6 +206,19 @@ public class Rental extends ResortComponent{
 		return true;
 	}
 
+	/*
+	 * setRentalXactReturned(Connection dbconn, int rentalXactDetailsId, Date dateReturned)
+	 * 
+	 * Purpose: This function performs a return of a rental item, marking the transaction as returned and saving the return date.
+	 * 
+	 * Returns: True if insertion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  rentalXactDetailsId: The id of the rental transaction whose items are being returned
+	 *  dateReturned: The date in which items in this rental were returned.
+	 * 
+	 */
 	public boolean setRentalXactReturned(Connection dbconn, int rentalXactDetailsId, Date dateReturned) {
 		PreparedStatement stmt = null;
 		boolean updated = false;
@@ -190,6 +261,18 @@ public class Rental extends ResortComponent{
 		return updated;
 	}
 
+	/*
+	 * deleteRentalXact(Connection dbconn, int rentalXactDetailsId)
+	 * 
+	 * Purpose: This function deletes a rental transaction.
+	 * 
+	 * Returns: True if insertion successful, false otherwise
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  rentalXactDetailsId: The id of the rental transaction which is being deleted
+	 * 
+	 */
 	public boolean deleteRentalXact(Connection dbconn, int rentalXactDetailsId) {
 
 		// Delete ItemInRental

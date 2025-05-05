@@ -1,6 +1,32 @@
 import java.sql.*;
 
+/*
+ * Class ResortComponent:
+ * 	Author: Seth Jernigan, Marco Pena
+ *  Purpose: This class is a superclass used by classes that contains common behavior between add/update/delete classes
+ *  for the ski resort.
+ * 
+ *  Inst Methods:
+ * 		createNewId(Connection dbconn, String tableName, String columnName)
+ * 		existsId(Connection dbconn, int givenId, String tableName, String idColumn)
+ * 		createNewTransaction(Connection dbconn, int transactionId, int resortPropertyId, int memberId, String transactionType, Timestamp xactDateTime, double amount)
+ * 		deleteFromWhere(Connection dbconn, String tableName, String idName, int givenId)
+ */
 public class ResortComponent {
+
+	/*
+	 * createNewId(Connection dbconn, String tableName, String columnName)
+	 * 
+	 * Purpose: This function creates a new unique ID for specified table
+	 * 
+	 * Returns: The created unique ID
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  tableName: The table creating a new ID for
+	 *  columnName: The ID column name for the table.
+	 * 
+	 */
 	public int createNewId(Connection dbconn, String tableName, String columnName) {
 		Statement stmt = null;
 		ResultSet answer = null;
@@ -45,6 +71,20 @@ public class ResortComponent {
 		return newId;
 	}
 
+	/*
+	 * existsId(Connection dbconn, int givenId, String tableName, String idColumn)
+	 * 
+	 * Purpose: This function determine whether there exists a queried ID in a given table
+	 * 
+	 * Returns: True if entry with ID found, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  givenId: The id being searched for in tableName
+	 *  tableName: The name of the table being searched in
+	 *  idColumn: The name of the id column in tableName
+	 * 
+	 */
 	public boolean existsId(Connection dbconn, int givenId, String tableName, String idColumn) {
 		Statement stmt = null;
 		ResultSet answer = null;
@@ -93,6 +133,23 @@ public class ResortComponent {
 		return found;
 	}
 
+	/*
+	 * createNewTransaction(Connection dbconn, int transactionId, int resortPropertyId, int memberId, String transactionType, Timestamp xactDateTime, double amount)
+	 * 
+	 * Purpose: This function creates a new transaction with specified params
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  transactionId: The unique ID made for this transaction
+	 *  resortPropertyId: The property that the transaction is assoc. with.
+	 *  memberId: The id of the member making the transaction
+	 *  transactionType: The type of the transaction
+	 *  xactDateTime: The timestamp of the transaction
+	 *  amount: The cost of the transaction.
+	 * 
+	 */
 	public boolean createNewTransaction(Connection dbconn, int transactionId, int resortPropertyId, int memberId, String transactionType,
 	Timestamp xactDateTime, double amount){
 		PreparedStatement stmt = null;
@@ -135,6 +192,20 @@ public class ResortComponent {
 		return true;
 	}
 
+	/*
+	 * deleteFromWhere(Connection dbconn, String tableName, String idName, int givenId)
+	 * 
+	 * Purpose: This function calls a DELETE FROM WHERE call to the database
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  tableName: The table to delete from
+	 *  idName: The name of the id column in tableName
+	 *  givenId: The id corresponding to record to delete from the table.
+	 * 
+	 */
 	public boolean deleteFromWhere(Connection dbconn, String tableName, String idName, int givenId) {
 		PreparedStatement stmt = null;
 

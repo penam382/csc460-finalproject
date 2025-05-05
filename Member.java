@@ -656,7 +656,7 @@ public class Member {
             int success = stmt.executeUpdate();
 
             if (success == 0) {
-                System.out.println("Error with creating a member account.");
+                System.out.println("Error with updating email.");
                 return false;
             }
             return true;

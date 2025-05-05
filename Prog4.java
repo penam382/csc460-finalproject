@@ -61,6 +61,16 @@ public class Prog4 {
             // Make connection to Oracle database, store in dbconn variable
             dbconn = DriverManager.getConnection(oracleURL, username, password);
             System.out.println("Connected to Oracle database.");
+            System.out.println("Welcome to our Ski Resort!");
+
+            System.out.println("Please select an option (1-7):");
+            System.out.println("1. Member Management");
+            System.out.println("2. Ski Pass Management");
+            System.out.println("3. Equipment Inventory Management");
+            System.out.println("4. Equipment Rental Management");
+            System.out.println("5. Lesson Purchase Management");
+            System.out.println("6. Query System");
+            System.out.println("7. Exit");
 
             // allow user to input
             Scanner scanner = new Scanner(System.in);
@@ -74,12 +84,28 @@ public class Prog4 {
 
                 switch (choice) {
                     case 1:
-        
+                        MemberUI.showMenu(dbconn);
                         break;
                     case 2:
+                        SkiPassUI.showMenu(dbconn);
+                        break;
+                    case 3:
+                        EquipmentInventoryUI.showMenu(dbconn);
+                        break;
+                    case 4:
+                        EquipmentRentalUI.showMenu(dbconn);
+                        break;
+                    case 5:
+                        LessonUI.showMenu(dbconn);
+                        break;
+                    case 6:
+                        QueryUI.showMenu(dbconn);
+                        break;
+                    case 7:
+                        
                         break;
                     default:
-                        System.out.println("Exit");
+                        System.out.println("Sorry, that is not an option, choose a number from 1-7");
                 }
             }
             
@@ -96,13 +122,6 @@ public class Prog4 {
             System.exit(-1);
 
         }
-    }
-
-    public String trailQuery(){
-        // List all open trails suitable for intermediate-level skiers, along with their
-        //  category and connected lifts that are currently operational
-
-        return "";
     }
 
 }

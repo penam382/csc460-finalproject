@@ -190,7 +190,7 @@ public class SkiPass extends ResortComponent{
 		}
 
 	/*
-	 * skiPassUsed(Connection dbconn, int skiPassId)
+	 * skiPassUsed(Connection dbconn, int skiPassId, int memberId, int liftId, Timestamp usageDateTime)
 	 * 
 	 * Purpose: This function acts when the ski pass is used, checking that the pass is usable, increasing number of uses, decreasing
 	 * uses remaining.
@@ -202,7 +202,7 @@ public class SkiPass extends ResortComponent{
 	 *  skiPassId: The id of the ski pass being used.
 	 * 
 	 */
-	public boolean skiPassUsed(Connection dbconn, int skiPassId) {
+	public boolean skiPassUsed(Connection dbconn, int skiPassId, int memberId, int liftId, Timestamp usageDateTime) {
 		// deduct 1 from ski pass remaining uses, incrememnt number of uses
 		PreparedStatement stmt = null;
 		boolean updated = false;
@@ -221,6 +221,23 @@ public class SkiPass extends ResortComponent{
 				System.out.println("ERROR: Failed to update ski pass usage.");
 				return false;
 			} 
+
+			stmt.close();
+
+			int newLiftUsageId = createNewId(dbconn, "LiftUsage", "liftUsageId");
+
+			String insertQry = "INSERT INTO LiftUsage (liftUsageId, liftId, skiPassId, memberId, usageDateTime) VALUES (?, ?, ?, ?, ?)";
+
+			stmt = dbconn.prepareStatement(insertQry);
+			stmt.setInt(1, newLiftUsageId);
+			stmt.setInt(2, liftId);
+			stmt.setInt(3, skiPassId);
+			stmt.setInt(4, memberId);
+			stmt.setTimestamp(5, usageDateTime);
+			stmt.executeUpdate();
+			stmt.close();
+
+
 		} catch (SQLException e) {
 	
 			System.err.println("*** SQLException:  "
@@ -581,6 +598,21 @@ public class SkiPass extends ResortComponent{
 			
 		}
 		return true;
+	}
+
+	// Method to potentially help the UI
+    public void listMembers(Connection dbconn) {
+        boolean tryShowAllMembers = showAllNames(dbconn, "MemberAccount", "memberId", "name");
+    }
+
+	// Helper function to print all resort properties
+	public void viewResortProperties(Connection dbconn) {
+		boolean tryShowProperties = showAllNames(dbconn, "ResortProperty", "resortPropertyId", "propertyType");
+	}
+
+	// Helper function to print all resort properties
+	public void viewLift(Connection dbconn) {
+		boolean tryShowProperties = showAllNames3(dbconn, "Lift", "liftId", "liftName", "abilityLevel");
 	}
 
 }

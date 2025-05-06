@@ -75,11 +75,13 @@ public class SkiPassUI {
         System.out.println("\n--- Add New Ski Pass ---");
         
         // Get member ID
+        skiPass.listMembers(dbconn);
         System.out.print("Enter member ID: ");
         int memberId = scanner.nextInt();
         scanner.nextLine();  
         
         // Get resort property ID
+        skiPass.viewResortProperties(dbconn);
         System.out.print("Enter resort property ID: ");
         int resortPropertyId = scanner.nextInt();
         scanner.nextLine();  
@@ -166,6 +168,7 @@ public class SkiPassUI {
         System.out.println("\n--- Record Lift Usage ---");
 
         try {
+            skiPass.listMembers(dbconn);
             System.out.print("Enter Member ID: ");
             int memberId = scanner.nextInt();
             scanner.nextLine(); 
@@ -182,8 +185,25 @@ public class SkiPassUI {
             if (answer.next()) {
                 int skiPassId = answer.getInt("skiPassId");
                 System.out.println("Your ski pass ID is: " + skiPassId);
+
+                skiPass.viewLift(dbconn);
+                System.out.println("Enter Lift Id: ");
+                int liftId = scanner.nextInt();
+                scanner.nextLine();
+
+                // Get transaction date/time from user
+                System.out.print("Enter usage date and time (YYYY-MM-DD HH:MM:SS): ");
+                String usageDateTimeStr = scanner.nextLine();
+                Timestamp usageDateTime = null;
                 
-                boolean success = skiPass.skiPassUsed(dbconn, skiPassId);
+                try {
+                    usageDateTime = Timestamp.valueOf(usageDateTimeStr);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid timestamp format. Please use YYYY-MM-DD HH:MM:SS format.");
+                    return;
+                }
+                
+                boolean success = skiPass.skiPassUsed(dbconn, skiPassId, memberId, liftId, usageDateTime);
                 
                 if (!success) {
                     System.out.println("\"Failed to record lift usage. Pass may be expired or have no remaining uses.\"");
@@ -209,6 +229,7 @@ public class SkiPassUI {
         System.out.println("\n--- Adjust Ski Pass Remaining Uses ---");
 
         try {
+            skiPass.listMembers(dbconn);
             System.out.print("Enter Member ID: ");
             int memberId = scanner.nextInt();
             scanner.nextLine(); 
@@ -265,6 +286,7 @@ public class SkiPassUI {
         
         
         try {
+            skiPass.listMembers(dbconn);
             System.out.print("Enter Member ID: ");
             int memberId = scanner.nextInt();
             scanner.nextLine(); 

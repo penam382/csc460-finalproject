@@ -236,4 +236,51 @@ public class ResortComponent {
 
 		return true;
 	}
+
+	public boolean showAllNames(Connection dbconn, String tableName, String idName, String secColName) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = String.format("SELECT %s, %s FROM %s", idName, secColName, tableName);
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println("Hello, world");
+
+			while(answer.next()) {
+				int id = answer.getInt(idName);
+				String secCol = answer.getString(secColName);
+
+				System.out.println("[ " + id + " | " + secCol + " ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
 }

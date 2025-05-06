@@ -19,7 +19,7 @@ import java.sql.*;
  *      updateEmergencyContact(Connection dbconn, int memberId, String newContactName, String newContactPhoneNum)
  *      memberQuery(Connection dbconn, int memberId)
  */
-public class Member {
+public class Member extends ResortComponent{
     private int memberId; // made this an instance variable for easier usage throughout class
 
     public Member() {
@@ -837,7 +837,7 @@ public class Member {
 
     // Method to potentially help the UI
     public void listMembers(Connection dbconn) {
-        
+        boolean tryShowAllMembers = showAllNames(dbconn, "MemberAccount", "memberId", "name");
     }
 
     // setters/getters

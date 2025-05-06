@@ -78,6 +78,8 @@ public class MemberUI {
         Scanner scanner = new Scanner(System.in);
     
         System.out.println("\n--- Add New Member ---");
+
+        member.listMembers(dbconn);
         
         // Collect member information
         System.out.print("Enter member name: ");

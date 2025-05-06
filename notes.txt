@@ -23,7 +23,7 @@ Also, there are tables that i think we need to populate on our own
 
 TODO:
 DONE - Write Classes for all components with relevant Add/Update/Delete Components OR are part of queries
-- Write UI code in Prog4
+DONE - Write UI code in Prog4
 DONE - Go in and physically create tables in Oracle on chosen account
 DONE - Populate Entries into tables
 DONE - Create Test Suite to Test & Fix Existing code
@@ -35,17 +35,17 @@ DONE - Create Test Suite to Test & Fix Existing code
 	DONE - Normalization Analysis
 	DONE - Query Descriptions
 - Complete readme.txt
-	- Compilation & Execution instructions
+	DONE - Compilation & Execution instructions
 	DONE - Workload Distribution
-- Clean + Retest
-	- Delete all tables
-	- Remake tables
-	- make sample insertions
-	- run test script
-	- delete all tables
-	- remake tables
-	- make sample insertions
-	- test UI
+DONE - Clean + Retest
+	DONE - Delete all tables
+	DONE - Remake tables
+	DONE - make sample insertions
+	DONE - run test script
+	DONE - delete all tables
+	DONE - remake tables
+	DONE - make sample insertions
+	DONE - test UI
 - Present to TAs
 
 

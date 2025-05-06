@@ -7,11 +7,19 @@ Compilation and Execution Instructions:
 	- Member.java
 	- Rental.java
 	- SkiPass.java
-	- Prog4.java
+	- EquipmentInventoryUI.java
+	- EquipmentRentalUI.java
+	- LessonUI.java
+	- MemberUI.java
+	- QueryUI.java
+	- SkiPassUI.java
 
-Next, to execute our text based user interface, run Prog4.java
+Next, to execute our text based user interface:
 
-[Add Details Here]
+1 - On lectura, execute: export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+2 - Compile Prog4.java
+3 - Run 'java Prog4' to execute our UI and use it!
+4 - Use of the UI should be guided and self explanatory! 
 
 Workload Distribution:
 

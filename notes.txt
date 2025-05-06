@@ -93,3 +93,4 @@ Marco Notes 5/4:
 
 - the query i came up with was having a member profile. seeing what they like to use (snowboard or ski) their size, and the amount of money spent
 - (for me) - dont forget to change queries so everything is based off memberid (line 165 EquipmentInventoryUI)
+- return them the memberid when account is created

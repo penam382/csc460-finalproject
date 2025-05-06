@@ -2,7 +2,8 @@
  * Class EquipmentInventoryUI:
  * 	Author: Seth Jernigan, Marco Pena
  *  Purpose: This class implements the UI for managing equipment inventory,
- *  allowing to add, update, and delete equipment in the system.
+ *  allowing to add, update, and delete equipment in the system. Since this is something the employee does, 
+ *  we assume they are able to have IDs with them.
  * 
  *  Public Methods:
  *      static void showMenu(Connection dbconn)
@@ -160,10 +161,7 @@ public class EquipmentInventoryUI {
         
         System.out.println("\n--- Delete Equipment ---");
         System.out.println("Note: Equipment cannot be deleted if currently rented out");
-        
-        // --------
-        // -------- change this part to member id then find the equipment ID
-        // --------
+
         System.out.print("Enter equipment ID: ");
         int itemId = scanner.nextInt();
         scanner.nextLine();

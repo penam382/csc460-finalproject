@@ -164,20 +164,35 @@ public class SkiPassUI {
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("\n--- Record Lift Usage ---");
-        
-        // Get ski pass ID
-        System.out.print("Enter ski pass ID: ");
-        int skiPassId = scanner.nextInt();
-        scanner.nextLine();
-        
+
         try {
-            boolean success = skiPass.skiPassUsed(dbconn, skiPassId);
+            System.out.print("Enter Member ID: ");
+            int memberId = scanner.nextInt();
+            scanner.nextLine(); 
+
+            String skiPassQuery = "SELECT spxd.skiPassId " +
+                             "FROM SkiPassXactDetails spxd " +
+                             "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
+                             "WHERE t.memberId = ?";
             
-            if (success) {
-                System.out.println("Lift usage recorded successfully!");
+            PreparedStatement pstmt = dbconn.prepareStatement(skiPassQuery);
+            pstmt.setInt(1, memberId);
+            ResultSet answer = pstmt.executeQuery();
+            
+            if (answer.next()) {
+                int skiPassId = answer.getInt("skiPassId");
+                System.out.println("Your ski pass ID is: " + skiPassId);
+                
+                boolean success = skiPass.skiPassUsed(dbconn, skiPassId);
+                
+                if (!success) {
+                    System.out.println("\"Failed to record lift usage. Pass may be expired or have no remaining uses.\"");
+                }
             } else {
-                System.out.println("Failed to record lift usage. Pass may be expired or have no remaining uses.");
+                System.out.println("No ski pass found for member ID: " + memberId);
             }
+            System.out.println("Sucessful record of lift usage");
+
         } catch (Exception e) {
             System.out.println("Error recording lift usage: " + e.getMessage());
         }
@@ -192,18 +207,37 @@ public class SkiPassUI {
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("\n--- Adjust Ski Pass Remaining Uses ---");
-        
-        // ski pass ID
-        System.out.print("Enter ski pass ID: ");
-        int skiPassId = scanner.nextInt();
-        scanner.nextLine();
-        
-        // Get new remaining uses 
-        System.out.print("Enter the correct value: ");
-        int newRemUses = scanner.nextInt();
-        scanner.nextLine();
-        
+
         try {
+            System.out.print("Enter Member ID: ");
+            int memberId = scanner.nextInt();
+            scanner.nextLine(); 
+
+            String skiPassQuery = "SELECT spxd.skiPassId " +
+                             "FROM SkiPassXactDetails spxd " +
+                             "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
+                             "WHERE t.memberId = ?";
+            
+            PreparedStatement pstmt = dbconn.prepareStatement(skiPassQuery);
+            pstmt.setInt(1, memberId);
+            ResultSet answer = pstmt.executeQuery();
+
+            int skiPassId = -1;
+            
+            // make sure skipassid exists for that member, if not we can just return 
+            if (answer.next()) {
+                skiPassId = answer.getInt("skiPassId");
+                System.out.println("Your ski pass ID is: " + skiPassId);          
+            } else {
+                System.out.println("No ski pass found for member ID: " + memberId);
+                return;
+            }
+
+            // Get new remaining uses 
+            System.out.print("Enter the correct value: ");
+            int newRemUses = scanner.nextInt();
+            scanner.nextLine();
+
             boolean success = skiPass.resetRemainingUses(dbconn, skiPassId, newRemUses);
             
             if (success) {
@@ -211,9 +245,11 @@ public class SkiPassUI {
             } else {
                 System.out.println("Failed to adjust remaining uses. Pass ID may not exist.");
             }
+            
         } catch (Exception e) {
             System.out.println("Error adjusting remaining uses: " + e.getMessage());
         }
+        
     }
 
     /**
@@ -227,12 +263,31 @@ public class SkiPassUI {
         System.out.println("\n--- Delete Ski Pass ---");
         System.out.println("Note: Ski pass can only be deleted if it's expired and has no remaining uses");
         
-        // Get ski pass ID
-        System.out.print("Enter ski pass ID: ");
-        int skiPassId = scanner.nextInt();
-        scanner.nextLine();
         
         try {
+            System.out.print("Enter Member ID: ");
+            int memberId = scanner.nextInt();
+            scanner.nextLine(); 
+
+            String skiPassQuery = "SELECT spxd.skiPassId " +
+                             "FROM SkiPassXactDetails spxd " +
+                             "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
+                             "WHERE t.memberId = ?";
+            
+            PreparedStatement pstmt = dbconn.prepareStatement(skiPassQuery);
+            pstmt.setInt(1, memberId);
+            ResultSet answer = pstmt.executeQuery();
+
+            int skiPassId = -1;
+            // make sure skipassid exists for that member, if not we can just return 
+            if (answer.next()) {
+                skiPassId = answer.getInt("skiPassId");
+                System.out.println("Your ski pass ID is: " + skiPassId);          
+            } else {
+                System.out.println("No ski pass found for member ID: " + memberId);
+                return;
+            }
+
             boolean success = skiPass.deleteSkiPass(dbconn, skiPassId);
             
             if (success) {

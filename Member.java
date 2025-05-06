@@ -108,6 +108,7 @@ public class Member {
                 if(!answer.wasNull()) {
                     newId = maxId + 1;
                 }
+                System.out.println("Emerg ID: " + newId);
             }
         } catch (SQLException e) {
             System.err.println("*** SQLException:  "
@@ -157,6 +158,7 @@ public class Member {
         // Create Unique Member ID
         int newMemberId = createNewMemberId(dbconn);
         
+        System.out.println("Member ID:" + memberId);
         // Create Emergency Contact:
         // Create Unique Emergency Contact ID
         int newEmergContactId = createNewEmergContId(dbconn);

@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Professor and TA's: Prof. Lester McCann, Xinyu Guo, Jianwei Shen
  * Due Date:   May 6th, 2025, at the beginning of class
  * 
- * Program #3 - This program 
+ * Program #4 - This program 
  * 
  * For parts of the code where we directly use oracle things it is from JDBC.java
  * Also, the structure of the main also comes from JDBC.java with some differences.

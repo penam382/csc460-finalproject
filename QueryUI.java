@@ -19,7 +19,6 @@ import java.util.Scanner;
 
 
 public class QueryUI {
-    
 
     public static void showMenu(Connection dbconn) {
         Scanner scanner = new Scanner(System.in);
@@ -94,14 +93,30 @@ public class QueryUI {
         SkiPass skiPass = new SkiPass();
         
         try {
-            System.out.print("Enter ski pass ID: ");
-            int skiPassId = scanner.nextInt();
+            System.out.print("Enter Member ID: ");
+            int memberId = scanner.nextInt();
             scanner.nextLine(); 
+
+            String skiPassQuery = "SELECT spxd.skiPassId " +
+                             "FROM SkiPassXactDetails spxd " +
+                             "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
+                             "WHERE t.memberId = ?";
             
-            boolean success = skiPass.skiPassQuery(dbconn, skiPassId);
+            PreparedStatement pstmt = dbconn.prepareStatement(skiPassQuery);
+            pstmt.setInt(1, memberId);
+            ResultSet rs = pstmt.executeQuery();
             
-            if (!success) {
-                System.out.println("Failed to retrieve ski pass.");
+            if (rs.next()) {
+                int skiPassId = rs.getInt("skiPassId");
+                System.out.println("Your ski pass ID is: " + skiPassId);
+                
+                boolean success = skiPass.skiPassQuery(dbconn, skiPassId);
+                
+                if (!success) {
+                    System.out.println("Failed to retrieve ski pass details.");
+                }
+            } else {
+                System.out.println("No ski pass found for member ID: " + memberId);
             }
             
         } catch (Exception e) {
@@ -111,7 +126,7 @@ public class QueryUI {
     }
 
     /**
-     * This methodList all open trails suitable for intermediate-level skiers, 
+     * This method list all open trails suitable for intermediate-level skiers, 
      *      along with their category and connected lifts that are currently operational
      * @param dbconn - The connection to the database
      */
@@ -180,7 +195,7 @@ public class QueryUI {
             // Get member ID
             System.out.print("Enter member ID: ");
             int memberId = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
             
             // First, get member name
             String memberQuery = "SELECT name FROM MemberAccount WHERE memberId = ?";
@@ -197,7 +212,7 @@ public class QueryUI {
                 return;
             }
             
-            // Close previous resources
+            // Close
             answer.close();
             stmt.close();
             
@@ -236,8 +251,7 @@ public class QueryUI {
             } else {
                 System.out.println("This member has not rented skis or snowboards.");
             }
-            
-            // Close previous resources
+
             answer.close();
             stmt.close();
             

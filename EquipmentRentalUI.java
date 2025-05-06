@@ -15,7 +15,6 @@
 
 import java.sql.*;
 import java.util.*;
-import java.time.LocalDate;
 
 public class EquipmentRentalUI {
 
@@ -145,7 +144,7 @@ public class EquipmentRentalUI {
         int rentalXactDetailsId = scanner.nextInt();
         scanner.nextLine();
     
-        // Get date from user for return (without time component)
+        // Get date from user for return
         System.out.print("Enter return date (YYYY-MM-DD): ");
         String dateStr = scanner.nextLine();
         java.sql.Date returnDate = null;

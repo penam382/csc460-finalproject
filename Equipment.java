@@ -34,6 +34,7 @@ public class Equipment extends ResortComponent {
 	public boolean addNewEquipment(Connection dbconn, int resortPropertyId, String itemType, String itemSize) {
 		// Create unique equipment ID
 		int newEquipmentId = createNewId(dbconn, "RentalInventory", "itemId");
+		System.out.println("The equipment ID is: " + newEquipmentId);
 
 		// verify resort property id, quit if invalid
 		if(!existsId(dbconn, resortPropertyId, "ResortProperty", "resortPropertyId")){

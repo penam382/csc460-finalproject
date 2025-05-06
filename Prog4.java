@@ -61,21 +61,22 @@ public class Prog4 {
             System.out.println("Connected to Oracle database.");
             System.out.println("Welcome to our Ski Resort!");
             
-            // user options
-            System.out.println("Please select an option (1-7):");
-            System.out.println("1. Member Management");
-            System.out.println("2. Ski Pass Management");
-            System.out.println("3. Equipment Inventory Management");
-            System.out.println("4. Equipment Rental Management");
-            System.out.println("5. Lesson Purchase Management");
-            System.out.println("6. Query System");
-            System.out.println("7. Exit");
-
             // allow user to input
             Scanner scanner = new Scanner(System.in);
             boolean exit = false;
 
             while (!exit) {
+                // user options
+                System.out.println();
+                System.out.println("Please select an option (1-7):");
+                System.out.println("1. Member Management");
+                System.out.println("2. Ski Pass Management");
+                System.out.println("3. Equipment Inventory Management");
+                System.out.println("4. Equipment Rental Management");
+                System.out.println("5. Lesson Purchase Management");
+                System.out.println("6. Query System");
+                System.out.println("7. Exit");
+
                 // menu
 
                 int choice = scanner.nextInt();
@@ -101,7 +102,7 @@ public class Prog4 {
                         QueryUI.showMenu(dbconn);
                         break;
                     case 7:
-                        
+                        exit = true;
                         break;
                     default:
                         System.out.println("Sorry, that is not an option, choose a number from 1-7");
@@ -110,7 +111,9 @@ public class Prog4 {
             
             // close and give a message
             dbconn.close();
+            scanner.close();
             System.out.println("Database connection closed.");
+            System.exit(-1);
         } catch (SQLException e) {
 
             System.err.println("*** SQLException:  "

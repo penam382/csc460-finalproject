@@ -340,4 +340,9 @@ public class Equipment extends ResortComponent {
 
 		return updated;
 	}
+
+	// Helper function to print all resort properties
+	public void viewResortProperties(Connection dbconn) {
+		boolean tryShowProperties = showAllNames(dbconn, "ResortProperty", "resortPropertyId", "propertyType");
+	}
 }

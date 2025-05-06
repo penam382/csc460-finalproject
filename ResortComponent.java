@@ -237,6 +237,20 @@ public class ResortComponent {
 		return true;
 	}
 
+	/*
+	 * showAllNames(Connection dbconn, String tableName, String idName, String secColName)
+	 * 
+	 * Purpose: Selects columns idName, secColName from tableName and pretty prints them.
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  tableName: The table to delete from
+	 *  idName: The name of the id column in tableName
+	 *  secColumnName: The name of the second column to be printed
+	 * 
+	 */
 	public boolean showAllNames(Connection dbconn, String tableName, String idName, String secColName) {
 		Statement stmt = null;
 		ResultSet answer = null;
@@ -247,13 +261,384 @@ public class ResortComponent {
 			stmt = dbconn.createStatement();
 			answer = stmt.executeQuery(query);
 
-			System.out.println("Hello, world");
+			System.out.println();
+			System.out.println("View all " + tableName + " entries:");
+			System.out.println("[ " + idName + " | " + secColName + " ]");
 
 			while(answer.next()) {
 				int id = answer.getInt(idName);
 				String secCol = answer.getString(secColName);
 
 				System.out.println("[ " + id + " | " + secCol + " ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * showAllNames3(Connection dbconn, String tableName, String idName, String secColName, String thirdColName)
+	 * 
+	 * Purpose: Selects columns idName, secColName, and thirdColName from tableName and pretty prints them.
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 *  tableName: The table to delete from
+	 *  idName: The name of the id column in tableName
+	 *  secColumnName: The name of the second column to be printed
+	 *  thirdColName: The name of the third column to be printed
+	 * 
+	 */
+	public boolean showAllNames3(Connection dbconn, String tableName, String idName, String secColName, String thirdColName) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = String.format("SELECT %s, %s, %s FROM %s", idName, secColName, thirdColName, tableName);
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println();
+			System.out.println("View all " + tableName + " entries:");
+			System.out.println("[ " + idName + " | " + secColName + " | " + thirdColName +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt(idName);
+				String secCol = answer.getString(secColName);
+				String thirdCol = answer.getString(thirdColName);
+
+				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * showAllSkiPasses(Connection dbconn)
+	 * 
+	 * Purpose: Selects SkiPassIds, MemberIds, and Names
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
+	public boolean showAllSkiPasses(Connection dbconn) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = "SELECT sp.skiPassId, t.memberId, m.name FROM MemberAccount m JOIN Transactions t ON m.memberId = t.memberId JOIN SkiPassXactDetails sp ON t.transactionId = sp.transactionId";
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println();
+			System.out.println("View all Ski Passes:");
+			System.out.println("[ " + "SkiPassId" + " | " + "MemberId" + " | " + "Member Name" +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt("skiPassId");
+				String secCol = answer.getString("memberId");
+				String thirdCol = answer.getString("name");
+
+				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * showAllRentalXacts(Connection dbconn)
+	 * 
+	 * Purpose: Selects RentalXactId, SkiPassId, MemberName
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
+	public boolean showAllRentalXacts(Connection dbconn) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = "SELECT rx.rentalXactDetailsId, rx.skiPassId, m.name FROM MemberAccount m JOIN Transactions t ON m.memberId = t.memberId JOIN RentalXactDetails rx ON t.transactionId = rx.transactionId";
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println();
+			System.out.println("View all Ski Passes:");
+			System.out.println("[ " + "rentalXactDetailsId" + " | " + "skiPassId" + " | " + "Member Name" +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt("rentalXactDetailsId");
+				String secCol = answer.getString("skiPassId");
+				String thirdCol = answer.getString("name");
+
+				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * showAllRentalXacts(Connection dbconn)
+	 * 
+	 * Purpose: Selects LessonXact, MemberName
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
+	public boolean showAllLessonXacts(Connection dbconn) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = "SELECT lx.lessonXactDetailsId, m.name FROM MemberAccount m JOIN Transactions t ON m.memberId = t.memberId JOIN LessonXactDetails lx ON t.transactionId = lx.transactionId";
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println();
+			System.out.println("View all Ski Passes:");
+			System.out.println("[ " + "lessonXactDetailsId" + " | " + "Member Name" +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt("lessonXactDetailsId");
+				String secCol = answer.getString("name");
+
+				System.out.println("[ " + id + " | " + secCol + " ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * showAllLessonSessions(Connection dbconn)
+	 * 
+	 * Purpose: Selects lessonSessionId, date, skill level
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
+	public boolean showAllLessonSessions(Connection dbconn) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = "SELECT ls.lessonSessionId, ls.sessionDate, lt.lessonTypeName FROM LessonSession ls JOIN LessonType lt ON ls.lessonTypeId = lt.lessonTypeId";
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println();
+			System.out.println("View all Ski Passes:");
+			System.out.println("[ " + "lessonSessionId" + " | " + "sessionDate" + " | " + "lessonTypeName" +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt("lessonSessionId");
+				Date secCol = answer.getDate("sessionDate");
+				String thirdCol = answer.getString("lessonTypeName");
+
+				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * showAllEquipment(Connection dbconn)
+	 * 
+	 * Purpose: Shows all non-deleted (archived) equipment
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
+	public boolean showAllEquipment(Connection dbconn) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = String.format("SELECT itemId, itemType, itemSize FROM RentalInventory WHERE archived = 0");
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			System.out.println();
+			System.out.println("View all " + "RentalInventory" + " entries:");
+			System.out.println("[ " + "itemId" + " | " + "itemType" + " | " + "itemSize" +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt("itemId");
+				String secCol = answer.getString("itemType");
+				String thirdCol = answer.getString("itemSize");
+
+				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
 			}
 		} catch (SQLException e) {
 	

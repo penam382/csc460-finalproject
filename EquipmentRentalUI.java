@@ -68,16 +68,25 @@ public class EquipmentRentalUI {
         
         // Get resort property ID
         System.out.print("Enter resort property ID: ");
+
+        rental.viewResortProperties(dbconn);
+
         int resortPropertyId = scanner.nextInt();
         scanner.nextLine();  
         
         // Get member ID
         System.out.print("Enter member ID: ");
+
+        rental.listMembers(dbconn);
+
         int memberId = scanner.nextInt();
         scanner.nextLine();
         
         // Get ski pass ID
         System.out.print("Enter ski pass ID: ");
+
+        rental.showAllSkiPasses(dbconn);
+
         int skiPassId = scanner.nextInt();
         scanner.nextLine();
         
@@ -105,6 +114,8 @@ public class EquipmentRentalUI {
         
         // Create an array list to store item IDs
         ArrayList<Integer> itemIds = new ArrayList<>();
+
+        rental.showAllEquipment(dbconn);
         
         // Get item IDs
         System.out.print("Enter item ID #: ");
@@ -141,6 +152,9 @@ public class EquipmentRentalUI {
         
         // Get rental transaction ID
         System.out.print("Enter rental transaction ID: ");
+
+        rental.showAllRentalXacts(dbconn);
+
         int rentalXactDetailsId = scanner.nextInt();
         scanner.nextLine();
     
@@ -178,6 +192,9 @@ public class EquipmentRentalUI {
         
         // Get rental transaction ID
         System.out.print("Enter rental transaction ID: ");
+
+        rental.showAllRentalXacts(dbconn);
+
         int rentalXactDetailsId = scanner.nextInt();
         scanner.nextLine();
         

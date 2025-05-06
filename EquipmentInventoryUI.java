@@ -17,6 +17,7 @@
 
 import java.sql.*;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class EquipmentInventoryUI {
 
@@ -74,13 +75,33 @@ public class EquipmentInventoryUI {
         System.out.println("\n--- Add New Equipment ---");
         
         // Get resort property ID
+        equipment.viewResortProperties(dbconn);
+
         System.out.print("Enter resort property ID: ");
+
         int resortPropertyId = scanner.nextInt();
         scanner.nextLine();
-        
+
         // Get item type
-        System.out.print("Enter equipment type (e.g., Ski, Snowboard, Boots): ");
-        String itemType = scanner.nextLine();
+        ArrayList<String> validEquip = new ArrayList<>();
+        validEquip.add("Skis");
+        validEquip.add("Snowboard");
+        validEquip.add("Boots");
+        validEquip.add("Helmet");
+        validEquip.add("Ski Poles");
+        boolean valid = false;
+        String itemType = "Default";
+
+        while(!valid) {
+            System.out.print("Enter new equipment type (e.g., Skis, Snowboard, Boots, Ski Poles, Helmet): ");
+            itemType = scanner.nextLine();
+
+            if(!validEquip.contains(itemType)) {
+                System.out.println("ERROR: Invalid equipment type... Try again!");
+            } else {
+                valid = true;
+            }
+        }
         
         // Get item size
         System.out.print("Enter equipment size: ");
@@ -106,13 +127,32 @@ public class EquipmentInventoryUI {
         System.out.println("\n--- Update Equipment Type ---");
         
         // Get item ID
+        equipment.showAllEquipment(dbconn);
+
         System.out.print("Enter equipment ID: ");
         int itemId = scanner.nextInt();
         scanner.nextLine();
         
         // Get new type
-        System.out.print("Enter new equipment type: ");
-        String newType = scanner.nextLine();
+        ArrayList<String> validEquip = new ArrayList<>();
+        validEquip.add("Skis");
+        validEquip.add("Snowboard");
+        validEquip.add("Boots");
+        validEquip.add("Helmet");
+        validEquip.add("Ski Poles");
+        boolean valid = false;
+        String newType = "Default";
+
+        while(!valid) {
+            System.out.print("Enter new equipment type (e.g., Skis, Snowboard, Boots, Ski Poles, Helmet): ");
+            newType = scanner.nextLine();
+
+            if(!validEquip.contains(newType)) {
+                System.out.println("ERROR: Invalid equipment type... Try again!");
+            } else {
+                valid = true;
+            }
+        }
         
         boolean success = equipment.changeEquipmentType(dbconn, itemId, newType);
         
@@ -134,10 +174,12 @@ public class EquipmentInventoryUI {
         System.out.println("\n--- Update Equipment Size ---");
         
         // item ID
+        equipment.showAllEquipment(dbconn);
         System.out.print("Enter equipment ID: ");
+
         int itemId = scanner.nextInt();
         scanner.nextLine();
-        
+
         // new size
         System.out.print("Enter new equipment size: ");
         String newSize = scanner.nextLine();
@@ -162,10 +204,12 @@ public class EquipmentInventoryUI {
         System.out.println("\n--- Delete Equipment ---");
         System.out.println("Note: Equipment cannot be deleted if currently rented out");
 
+        equipment.showAllEquipment(dbconn);
         System.out.print("Enter equipment ID: ");
+
         int itemId = scanner.nextInt();
         scanner.nextLine();
-        
+
         boolean success = equipment.deleteEquipment(dbconn, itemId);
         
         if (success) {

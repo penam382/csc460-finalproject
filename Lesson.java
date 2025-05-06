@@ -327,4 +327,14 @@ public class Lesson extends ResortComponent{
 		
 		return true;
 	}
+
+	// Helper function to print all resort properties
+	public void viewResortProperties(Connection dbconn) {
+		boolean tryShowProperties = showAllNames(dbconn, "ResortProperty", "resortPropertyId", "propertyType");
+	}
+
+	// Method to potentially help the UI
+    public void listMembers(Connection dbconn) {
+        boolean tryShowAllMembers = showAllNames(dbconn, "MemberAccount", "memberId", "name");
+    }
 }

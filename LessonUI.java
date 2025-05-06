@@ -65,11 +65,17 @@ public class LessonUI {
         
         // Get resort property ID
         System.out.print("Enter resort property ID: ");
+
+        lesson.viewResortProperties(dbconn);
+
         int resortPropertyId = scanner.nextInt();
         scanner.nextLine();
         
         // Get member ID
         System.out.print("Enter member ID: ");
+
+        lesson.listMembers(dbconn);
+
         int memberId = scanner.nextInt();
         scanner.nextLine();
         
@@ -117,16 +123,22 @@ public class LessonUI {
         
         // Get lesson transaction ID
         System.out.print("Enter lesson transaction ID: ");
+
+        lesson.showAllLessonXacts(dbconn);
+
         int lessonXactDetailsId = scanner.nextInt();
         scanner.nextLine();
         
         // Get lesson session ID
         System.out.print("Enter lesson session ID: ");
+
+        lesson.showAllLessonSessions(dbconn);
+
         int lessonSessionId = scanner.nextInt();
         scanner.nextLine();
         
-        // Get date from user for return (without time component)
-        System.out.print("Enter return date (YYYY-MM-DD): ");
+        // Get date from user for usage (without time component)
+        System.out.print("Enter usage date (YYYY-MM-DD): ");
         String dateStr = scanner.nextLine();
         java.sql.Date usedDate = null;
         
@@ -159,6 +171,7 @@ public class LessonUI {
         
         // Get lesson transaction ID
         System.out.print("Enter lesson transaction ID: ");
+        lesson.showAllLessonXacts(dbconn);
         int lessonXactDetailsId = scanner.nextInt();
         scanner.nextLine();
         

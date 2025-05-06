@@ -78,8 +78,6 @@ public class MemberUI {
         Scanner scanner = new Scanner(System.in);
     
         System.out.println("\n--- Add New Member ---");
-
-        member.listMembers(dbconn);
         
         // Collect member information
         System.out.print("Enter member name: ");
@@ -131,6 +129,8 @@ public class MemberUI {
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("\n--- Update Member Phone Number ---");
+
+        member.listMembers(dbconn);
         
         // Get member ID
         System.out.print("Enter member ID: ");
@@ -166,6 +166,8 @@ public class MemberUI {
         // Get member ID
         System.out.print("Enter member ID: ");
         int memberId;
+
+        member.listMembers(dbconn);
         
         memberId = scanner.nextInt();
         scanner.nextLine();  
@@ -197,6 +199,8 @@ public class MemberUI {
         // Get member ID
         System.out.print("Enter member ID: ");
         int memberId;
+
+        member.listMembers(dbconn);
         
         memberId = scanner.nextInt();
         scanner.nextLine();  
@@ -230,6 +234,8 @@ public class MemberUI {
         // Get member ID
         System.out.print("Enter member ID: ");
         int memberId;
+
+        member.listMembers(dbconn);
         
         memberId = scanner.nextInt();
         scanner.nextLine();  

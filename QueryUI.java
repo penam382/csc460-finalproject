@@ -74,6 +74,7 @@ public class QueryUI {
         Scanner scanner = new Scanner(System.in);
         
         // Get member ID
+        member.listMembers(dbconn);
         System.out.print("Enter member ID: ");
         int memberId = scanner.nextInt();
         scanner.nextLine();  
@@ -91,9 +92,12 @@ public class QueryUI {
     private static void querySkiPassUsage(Connection dbconn) {
         Scanner scanner = new Scanner(System.in);
         SkiPass skiPass = new SkiPass();
+        Member member = new Member();
         
         try {
+            member.listMembers(dbconn);
             System.out.print("Enter Member ID: ");
+
             int memberId = scanner.nextInt();
             scanner.nextLine(); 
 
@@ -190,10 +194,13 @@ public class QueryUI {
         Scanner scanner = new Scanner(System.in);
         PreparedStatement stmt = null;
         ResultSet answer = null;
+        Member member = new Member();
         
         try {
             // Get member ID
+            member.listMembers(dbconn);
             System.out.print("Enter member ID: ");
+
             int memberId = scanner.nextInt();
             scanner.nextLine(); 
             

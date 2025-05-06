@@ -134,6 +134,62 @@ public class ResortComponent {
 	}
 
 	/*
+	 * existsId(Connection dbconn, int skiPassId)
+	 * 
+	 * Purpose: This function determine whether the ski pass with skiPassId is usable
+	 * 
+	 * Returns: True if active ski pass found, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 	skiPassId: The Id of the ski pass being queried
+	 * 
+	 */
+	public boolean existsNonExpiredSkiPass(Connection dbconn, int skiPassId) {
+		Statement stmt = null;
+		ResultSet answer = null;
+		boolean found = false;
+
+		try{
+			String query = String.format("SELECT 1 FROM SkiPass WHERE remainingUses > 0 AND expirationDate > SYSDate AND skiPassId = %s", skiPassId);
+			stmt = dbconn.createStatement();
+			answer = stmt.executeQuery(query);
+
+			if (answer.next()) {
+				found = true;
+			} else {
+				System.out.println("ERROR: No non-expired Ski Pass (or pass with remaining uses) found for ID: " + skiPassId);
+				return false;
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			System.exit(-1);
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				System.exit(-1);
+			}
+			
+		}
+
+		return found;
+	}
+
+	/*
 	 * createNewTransaction(Connection dbconn, int transactionId, int resortPropertyId, int memberId, String transactionType, Timestamp xactDateTime, double amount)
 	 * 
 	 * Purpose: This function creates a new transaction with specified params
@@ -394,6 +450,68 @@ public class ResortComponent {
 				int id = answer.getInt("skiPassId");
 				String secCol = answer.getString("memberId");
 				String thirdCol = answer.getString("name");
+
+				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
+			}
+		} catch (SQLException e) {
+	
+			System.err.println("*** SQLException:  "
+				+ "Could not fetch query results.");
+			System.err.println("\tMessage:   " + e.getMessage());
+			System.err.println("\tSQLState:  " + e.getSQLState());
+			System.err.println("\tErrorCode: " + e.getErrorCode());
+			return false;
+
+		} finally {
+			try {
+				if (answer != null) {
+					answer.close();
+				}
+
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Error closing the query resources.");
+				return false;
+			}
+			
+		}
+
+		return found;
+
+	}
+
+	/*
+	 * boolean showMemberSkiPasses(Connection dbconn, int memberId)
+	 * 
+	 * Purpose: Selects Ski Pass IDs, Purchase Dates, and Expiration Dates for Member Ski Passes
+	 * 
+	 * Returns: True if successful, false otherwise.
+	 * 
+	 * Parameters:
+	 * 	dbconn: The connection to the database
+	 * 
+	 */
+	public boolean showMemberSkiPasses(Connection dbconn, int memberId) {
+		PreparedStatement stmt = null;
+		ResultSet answer = null;
+		boolean found = true;
+
+		try{
+			String query = "SELECT spx.skiPassId, t.transactionDateTime, s.expirationDate FROM Transactions t JOIN SkiPassXactDetails spx ON t.transactionId = spx.transactionId JOIN SkiPass s ON spx.skiPassId = s.skiPassId WHERE t.memberId = ?";
+			stmt = dbconn.prepareStatement(query);
+			stmt.setInt(1, memberId);
+			answer = stmt.executeQuery();
+
+			System.out.println();
+			System.out.println("View Your Ski Passes:");
+			System.out.println("[ " + "SkiPassId" + " | " + "transactionDateTime" + " | " + "expirationDate" +" ]");
+
+			while(answer.next()) {
+				int id = answer.getInt("skiPassId");
+				Timestamp secCol = answer.getTimestamp("transactionDateTime");
+				Date thirdCol = answer.getDate("expirationDate");
 
 				System.out.println("[ " + id + " | " + secCol + " | " + thirdCol +" ]");
 			}

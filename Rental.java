@@ -184,6 +184,10 @@ public class Rental extends ResortComponent{
 			return false;
 		}
 
+		if(!existsNonExpiredSkiPass(dbconn, skiPassId)) {
+			return false;
+		}
+
 		// fill content for RentalXactDetails: TransactionId, skiPassId, returnStatus = 0, dateReturned = NULL
 		boolean successRentalXact = createNewRentalXactDetails(dbconn, newRentalXactDetailsId, newTransactionId, skiPassId);
 		if(!successRentalXact) {

@@ -173,7 +173,7 @@ public class SkiPassUI {
             int memberId = scanner.nextInt();
             scanner.nextLine(); 
 
-            String skiPassQuery = "SELECT spxd.skiPassId " +
+            String skiPassQuery = "SELECT spxd.skiPassId, t.transactionDateTime " +
                              "FROM SkiPassXactDetails spxd " +
                              "JOIN Transactions t ON spxd.transactionId = t.transactionId " +
                              "WHERE t.memberId = ?";
@@ -181,36 +181,34 @@ public class SkiPassUI {
             PreparedStatement pstmt = dbconn.prepareStatement(skiPassQuery);
             pstmt.setInt(1, memberId);
             ResultSet answer = pstmt.executeQuery();
-            
-            if (answer.next()) {
-                int skiPassId = answer.getInt("skiPassId");
-                System.out.println("Your ski pass ID is: " + skiPassId);
 
-                skiPass.viewLift(dbconn);
-                System.out.println("Enter Lift Id: ");
-                int liftId = scanner.nextInt();
-                scanner.nextLine();
+            skiPass.showMemberSkiPasses(dbconn, memberId);
 
-                // Get transaction date/time from user
-                System.out.print("Enter usage date and time (YYYY-MM-DD HH:MM:SS): ");
-                String usageDateTimeStr = scanner.nextLine();
-                Timestamp usageDateTime = null;
-                
-                try {
-                    usageDateTime = Timestamp.valueOf(usageDateTimeStr);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Invalid timestamp format. Please use YYYY-MM-DD HH:MM:SS format.");
-                    return;
-                }
-                
-                boolean success = skiPass.skiPassUsed(dbconn, skiPassId, memberId, liftId, usageDateTime);
-                
-                if (!success) {
-                    System.out.println("\"Failed to record lift usage. Pass may be expired or have no remaining uses.\"");
-                }
-            } else {
-                System.out.println("No ski pass found for member ID: " + memberId);
+            System.out.println("Select Ski Pass to Use: ");
+            int skiPassId = scanner.nextInt();
+
+            skiPass.viewLift(dbconn);
+            System.out.println("Enter Lift Id: ");
+            int liftId = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.println("Enter usage date and time (YYYY-MM-DD HH:MM:SS): ");
+            String usageDateTimeStr = scanner.nextLine();
+            Timestamp usageDateTime = null;
+
+            try {
+                usageDateTime = Timestamp.valueOf(usageDateTimeStr);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid timestamp format. Please use YYYY-MM-DD HH:MM:SS format.");
+                return;
             }
+
+            boolean success = skiPass.skiPassUsed(dbconn, skiPassId, memberId, liftId, usageDateTime);
+                
+            if (!success) {
+                System.out.println("\"Failed to record lift usage. Pass may be expired or have no remaining uses.\"");
+            }
+
             System.out.println("Sucessful record of lift usage");
 
         } catch (Exception e) {
@@ -243,16 +241,10 @@ public class SkiPassUI {
             pstmt.setInt(1, memberId);
             ResultSet answer = pstmt.executeQuery();
 
-            int skiPassId = -1;
-            
-            // make sure skipassid exists for that member, if not we can just return 
-            if (answer.next()) {
-                skiPassId = answer.getInt("skiPassId");
-                System.out.println("Your ski pass ID is: " + skiPassId);          
-            } else {
-                System.out.println("No ski pass found for member ID: " + memberId);
-                return;
-            }
+            skiPass.showMemberSkiPasses(dbconn, memberId);
+
+            System.out.println("Select Ski Pass to Use: ");
+            int skiPassId = scanner.nextInt();
 
             // Get new remaining uses 
             System.out.print("Enter the correct value: ");
